@@ -22,7 +22,7 @@ function Login() {
       setMessage("Login successful! Redirecting...");
       setAlertType("success");
       setOpenSnackbar(true);
-      setTimeout(() => navigate("/"), 2000); // Redirect to Home Page
+      setTimeout(() => navigate("/home"), 2000); // Redirect to Home Page
     } catch (error) {
       setMessage("Invalid email or password. Please try again.");
       setAlertType("error");
