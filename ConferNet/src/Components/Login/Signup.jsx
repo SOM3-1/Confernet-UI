@@ -3,14 +3,15 @@ import { auth } from "../../firebase/firebaseConfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { Container, TextField, Button, Typography, Paper, MenuItem, Snackbar, Alert } from "@mui/material";
+import { Link } from "react-router-dom";
 import "./style.css";
 
 function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("attendee");
-  const [message, setMessage] = useState(""); 
-  const [alertType, setAlertType] = useState("error"); 
+  const [message, setMessage] = useState("");
+  const [alertType, setAlertType] = useState("error");
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const navigate = useNavigate();
 
@@ -21,7 +22,7 @@ function Signup() {
       setMessage("Signup successful! Redirecting to login...");
       setAlertType("success");
       setOpenSnackbar(true);
-      setTimeout(() => navigate("/login"), 2000); 
+      setTimeout(() => navigate("/login"), 2000); // Redirect to login page
     } catch (error) {
       setMessage(getFirebaseErrorMessage(error.code));
       setAlertType("error");
@@ -59,15 +60,18 @@ function Signup() {
           </TextField>
           <Button type="submit" variant="contained" color="primary" fullWidth>Signup</Button>
         </form>
+
+        {/*  Add Login Link Below Signup Button */}
+        <Typography align="center" style={{ marginTop: "10px" }}>
+          Already have an account?{" "}
+          <Link to="/login" style={{ color: "#1976d2", fontWeight: "bold", textDecoration: "none" }}>
+            Login here
+          </Link>
+        </Typography>
       </Paper>
 
-      {/* Snackbar Alert for Error and Success Messages */}
-      <Snackbar 
-        open={openSnackbar} 
-        autoHideDuration={4000} 
-        onClose={handleCloseSnackbar} 
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
+      {/* Snackbar Alert for Errors & Success */}
+      <Snackbar open={openSnackbar} autoHideDuration={4000} onClose={handleCloseSnackbar} anchorOrigin={{ vertical: "top", horizontal: "center" }}>
         <Alert onClose={handleCloseSnackbar} severity={alertType} sx={{ width: "100%" }}>
           {message}
         </Alert>

@@ -1,16 +1,17 @@
 import { useState } from "react";
 import { auth } from "../../firebase/firebaseConfig";
-import { signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { Container, TextField, Button, Typography, Paper, MenuItem, Snackbar, Alert } from "@mui/material";
+import { Link } from "react-router-dom";
 import "./style.css";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("attendee");
-  const [message, setMessage] = useState(""); // Store error/success message
-  const [alertType, setAlertType] = useState("error"); // Default to error
+  const [message, setMessage] = useState("");
+  const [alertType, setAlertType] = useState("error");
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const navigate = useNavigate();
 
@@ -18,29 +19,14 @@ function Login() {
     e.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      setMessage("Login successful!");
+      setMessage("Login successful! Redirecting...");
       setAlertType("success");
       setOpenSnackbar(true);
-      setTimeout(() => navigate("/home"), 2000); // Navigate to home after 2 sec
+      setTimeout(() => navigate("/"), 2000); // Redirect to Home Page
     } catch (error) {
-      setMessage(getFirebaseErrorMessage(error.code));
+      setMessage("Invalid email or password. Please try again.");
       setAlertType("error");
       setOpenSnackbar(true);
-    }
-  };
-
-  const getFirebaseErrorMessage = (errorCode) => {
-    switch (errorCode) {
-      case "auth/invalid-email":
-        return "Invalid email format. Please enter a valid email.";
-      case "auth/user-not-found":
-        return "No account found with this email.";
-      case "auth/wrong-password":
-        return "Incorrect password. Please try again.";
-      case "auth/invalid-credential":
-        return "Invalid credentials. Check your email and password.";
-      default:
-        return "An error occurred. Please try again.";
     }
   };
 
@@ -61,15 +47,18 @@ function Login() {
           </TextField>
           <Button type="submit" variant="contained" color="primary" fullWidth>Login</Button>
         </form>
+
+        {/*  Add Signup Link Below Login Button */}
+        <Typography align="center" style={{ marginTop: "10px" }}>
+          Don't have an account?{" "}
+          <Link to="/signup" style={{ color: "#1976d2", fontWeight: "bold", textDecoration: "none" }}>
+            Sign up here
+          </Link>
+        </Typography>
       </Paper>
 
-      {/* Snackbar Alert for Error and Success Messages */}
-      <Snackbar 
-        open={openSnackbar} 
-        autoHideDuration={4000} 
-        onClose={handleCloseSnackbar} 
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
+      {/* Snackbar Alert for Errors & Success */}
+      <Snackbar open={openSnackbar} autoHideDuration={4000} onClose={handleCloseSnackbar} anchorOrigin={{ vertical: "top", horizontal: "center" }}>
         <Alert onClose={handleCloseSnackbar} severity={alertType} sx={{ width: "100%" }}>
           {message}
         </Alert>
