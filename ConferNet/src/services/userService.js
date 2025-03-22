@@ -88,3 +88,27 @@ export const getUsersByIds = async (userIds) => {
     return data.users;
   };
   
+export const joinEvent = async (userId, eventId) => {
+  const response = await fetch(`${API_URL}/users/${userId}/join-event/${eventId}`, {
+    method: "POST",
+  });
+  const data = await response.json();
+  if (!response.ok) throw new Error(data.error || "Failed to join event");
+  return data;
+};
+
+export const leaveEvent = async (userId, eventId) => {
+  const response = await fetch(`${API_URL}/users/${userId}/leave-event/${eventId}`, {
+    method: "DELETE",
+  });
+  const data = await response.json();
+  if (!response.ok) throw new Error(data.error || "Failed to leave event");
+  return data;
+};
+
+export const getRegisteredEvents = async (userId) => {
+  const response = await fetch(`${API_URL}/users/${userId}/registered-events`);
+  const data = await response.json();
+  if (!response.ok) throw new Error(data.error || "Failed to fetch registered events");
+  return data.events;
+};
