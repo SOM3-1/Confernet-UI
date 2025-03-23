@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { Container, TextField, Button, Typography, Paper, MenuItem, Snackbar, Alert } from "@mui/material";
 import { Link } from "react-router-dom";
 import "./style.css";
+import { LoadingSpinner } from "../Loading/LoadingSpinner";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -14,19 +15,22 @@ function Login() {
   const [alertType, setAlertType] = useState("error");
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       await signInWithEmailAndPassword(auth, email, password);
       setMessage("Login successful! Redirecting...");
       setAlertType("success");
       setOpenSnackbar(true);
-      setTimeout(() => navigate("/home"), 2000); // Redirect to Home Page
     } catch (error) {
       setMessage("Invalid email or password. Please try again.");
       setAlertType("error");
       setOpenSnackbar(true);
+    }finally {
+      setLoading(false);
     }
   };
 
@@ -44,7 +48,6 @@ function Login() {
           <Button type="submit" variant="contained" color="primary" fullWidth>Login</Button>
         </form>
 
-        {/*  Add Signup Link Below Login Button */}
         <Typography align="center" style={{ marginTop: "10px" }}>
           Don't have an account?{" "}
           <Link to="/signup" style={{ color: "#1976d2", fontWeight: "bold", textDecoration: "none" }}>
@@ -52,8 +55,9 @@ function Login() {
           </Link>
         </Typography>
       </Paper>
+            {loading && 
+          <LoadingSpinner /> }
 
-      {/* Snackbar Alert for Errors & Success */}
       <Snackbar open={openSnackbar} autoHideDuration={4000} onClose={handleCloseSnackbar} anchorOrigin={{ vertical: "top", horizontal: "center" }}>
         <Alert onClose={handleCloseSnackbar} severity={alertType} sx={{ width: "100%" }}>
           {message}
