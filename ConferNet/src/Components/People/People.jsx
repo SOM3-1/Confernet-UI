@@ -1,16 +1,56 @@
-import { useState } from "react";
-import { Card, CardContent, Typography, TextField, IconButton, Box, Divider, Avatar, List, ListItem, ListItemAvatar, ListItemText } from "@mui/material";
+import { useState, useEffect } from "react";
+import {
+  Card, CardContent, Typography, TextField,
+  IconButton, Box, Avatar, List, ListItem, ListItemAvatar, ListItemText
+} from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import ChatIcon from "@mui/icons-material/Chat";
+import { getAllUsers } from "../../services/userService";
 
 function People() {
-  const people = [
-    { id: 1, name: "Dr. Jane Smith", role: "Keynote Speaker" },
-    { id: 2, name: "Arjun Patel", role: "Developer, Attendee" },
-    { id: 3, name: "Emily Zhang", role: "Researcher, Organizer" },
-  ];
-
+  const [people, setPeople] = useState([]);
   const [messages, setMessages] = useState({});
+
+  const getInitials = (name) => {
+    if (!name) return "NA";
+    const parts = name.trim().split(" ");
+    return parts.slice(0, 2).map(p => p[0].toUpperCase()).join("");
+  };
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const allUsers = await getAllUsers();
+        const currentUserId = localStorage.getItem("userId");
+        console.log(allUsers)
+        const filtered = allUsers
+          .filter(user => user.id !== currentUserId)
+          .map(user => ({
+            id: user.id,
+            name: user.name,
+            role:
+              user.role === 1
+                ? "Organizer"
+                : user.role === 2
+                  ? "Speaker"
+                  : user.role === 3
+                    ? "Attendee"
+                    : user.organization || "Participant",
+            jobTitle: user.jobTitle || "",
+            organization: user.organization || "",
+            bio: user.bio || "",
+            location: [user.city, user.country].filter(Boolean).join(", "),
+            initials: getInitials(user.name)
+          }));
+
+        setPeople(filtered);
+      } catch (err) {
+        console.error("Error fetching users:", err.message);
+      }
+    };
+
+    fetchUsers();
+  }, []);
 
   const handleSend = (id) => {
     if (messages[id]?.trim()) {
@@ -26,18 +66,24 @@ function People() {
   return (
     <Card sx={{ mb: 2 }}>
       <CardContent>
-        <Typography variant="h6" gutterBottom>
-          Networking
-        </Typography>
+        <Typography variant="h6" gutterBottom>Networking</Typography>
 
         <List>
-          {people.map((person) => (
+          {people.map(person => (
             <ListItem key={person.id} alignItems="flex-start" sx={{ flexDirection: 'column', alignItems: 'stretch', mb: 2 }}>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <ListItemAvatar>
-                  <Avatar><ChatIcon /></Avatar>
+                  <Avatar>{person.initials}</Avatar>
                 </ListItemAvatar>
-                <ListItemText primary={person.name} secondary={person.role} />
+                <ListItemText
+                  primary={person.name}
+                  secondary={[
+                    person.role && `(${person.role})`,
+                    person.jobTitle,
+                    person.organization && `at ${person.organization}`,
+                    person.location
+                  ].filter(Boolean).join(" • ")}
+                />
               </Box>
               <Box sx={{ display: 'flex', mt: 1 }}>
                 <TextField
