@@ -10,18 +10,18 @@ import { LoadingSpinner } from "../Loading/LoadingSpinner";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("attendee");
   const [message, setMessage] = useState("");
   const [alertType, setAlertType] = useState("error");
   const [openSnackbar, setOpenSnackbar] = useState(false);
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const userId = userCredential.user.uid;
+      localStorage.setItem("userId", userId);
       setMessage("Login successful! Redirecting...");
       setAlertType("success");
       setOpenSnackbar(true);

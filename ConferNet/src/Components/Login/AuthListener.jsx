@@ -1,43 +1,38 @@
 import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
-import { Navigate, Outlet, useLocation } from "react-router-dom";
-import {auth} from "./../../firebase/firebaseConfig";
+import { Navigate, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { auth } from "./../../firebase/firebaseConfig";
+import { LoadingSpinner } from "../Loading/LoadingSpinner";
 
 export const AuthListener = () => {
-  const [user, setUser] = useState(undefined); 
+  const [user, setUser] = useState(null);
+  const [authChecked, setAuthChecked] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       setUser(firebaseUser);
+      setAuthChecked(true);
     });
 
     return () => unsubscribe();
   }, []);
 
-  if (user === undefined) {
-    return <div>Loading...</div>;
-  }
+  useEffect(() => {
+    if (!authChecked) return;
 
-  const protectedRoutes = [
-    "/home",
-    "/account",
-    "/people",
-    "/messages",
-    "/MyContent",
-    "/schedule",
-    "/mySchedule",
-    "/venue",
-    "/session",
-  ];
+    const publicRoutes = ["/", "/login", "/signup"];
+    const isPublic = publicRoutes.includes(location.pathname);
 
-  if (!user && protectedRoutes.includes(location.pathname)) {
-    return <Navigate to="/login" replace />;
-  }
+    if (user && isPublic) {
+      navigate("/home", { replace: true });
+    } else if (!user && !isPublic) {
+      navigate("/login", { replace: true });
+    }
+  }, [authChecked, user, location.pathname, navigate]);
 
-  if (user && (location.pathname === "/login" || location.pathname === "/signup" || location.pathname === "/")) {
-    return <Navigate to="/home" replace />;
-  }
+  if (!authChecked) return <LoadingSpinner />;
 
   return <Outlet />;
 };

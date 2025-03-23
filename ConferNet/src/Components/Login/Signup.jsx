@@ -55,6 +55,10 @@ function Signup() {
       );
       const userId = userCredential.user.uid;
 
+      localStorage.setItem("userName", name);
+      localStorage.setItem("role", role);
+      localStorage.setItem("userId", userId);
+
       await registerUser(
         userId,
         name,
@@ -70,10 +74,7 @@ function Signup() {
         null
       );
 
-      localStorage.setItem("name", name);
-      localStorage.setItem("role", role);
-
-      setMessage(`Welcome, ${name}! Signup successful. Redirecting to home...`);
+      setMessage(`Welcome, ${userName}! Signup successful. Redirecting to home...`);
       setAlertType("success");
       setOpenSnackbar(true);
     } catch (error) {

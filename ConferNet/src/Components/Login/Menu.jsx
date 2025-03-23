@@ -49,6 +49,9 @@ function Home() {
       setMessage("Logout successful! Redirecting to login...");
       setAlertType("success");
       setOpenSnackbar(true);
+      localStorage.removeItem("userId");
+    localStorage.removeItem("userName");
+    localStorage.removeItem("role");
       setTimeout(() => navigate("/login"), 2000);
     } catch (error) {
       setMessage("Logout failed. Please try again.");
