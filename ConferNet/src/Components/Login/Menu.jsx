@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../../firebase/firebaseConfig";
@@ -50,9 +50,8 @@ function Home() {
       setAlertType("success");
       setOpenSnackbar(true);
       localStorage.removeItem("userId");
-    localStorage.removeItem("userName");
-    localStorage.removeItem("role");
-      setTimeout(() => navigate("/login"), 2000);
+      localStorage.removeItem("userName");
+      localStorage.removeItem("role");
     } catch (error) {
       setMessage("Logout failed. Please try again.");
       setAlertType("error");
