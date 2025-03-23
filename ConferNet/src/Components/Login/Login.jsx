@@ -41,10 +41,6 @@ function Login() {
         <form onSubmit={handleLogin}>
           <TextField fullWidth margin="normal" label="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
           <TextField fullWidth margin="normal" label="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-          <TextField select fullWidth margin="normal" label="Role" value={role} onChange={(e) => setRole(e.target.value)}>
-            <MenuItem value="attendee">Attendee</MenuItem>
-            <MenuItem value="organizer">Organizer</MenuItem>
-          </TextField>
           <Button type="submit" variant="contained" color="primary" fullWidth>Login</Button>
         </form>
 
