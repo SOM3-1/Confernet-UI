@@ -5,10 +5,12 @@ import AddIcon from '@mui/icons-material/Add';
 import { getUserById } from './../../services/userService'; 
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './../../firebase/firebaseConfig';
+import { CreateEventModal } from './CreateEventModal';
 
 export const CreateEventButton = () => {
   const navigate = useNavigate();
   const [isOrganizer, setIsOrganizer] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -29,7 +31,7 @@ export const CreateEventButton = () => {
       }
     });
 
-    return () => unsubscribe(); // Clean up listener on unmount
+    return () => unsubscribe(); 
   }, []);
 
   if (!isOrganizer) return null;
@@ -47,7 +49,7 @@ export const CreateEventButton = () => {
     >
       <Box
         component="button"
-        onClick={() => navigate("/create-event")}
+        onClick={() => setOpenModal(true)}
         sx={{
           display: "flex",
           alignItems: "center",
@@ -98,6 +100,7 @@ export const CreateEventButton = () => {
           Create Event
         </Typography>
       </Box>
+      <CreateEventModal open={openModal} onClose={() => setOpenModal(false)} />
     </Box>
   );
 };

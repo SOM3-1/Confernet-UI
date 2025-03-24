@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CssBaseline, Box, Container } from "@mui/material";
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
@@ -16,6 +16,10 @@ const Home = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [selectedTab, setSelectedTab] = useState("Home");
   const [snackbar, setSnackbar] = useState({ open: false, message: "", type: "success" });
+
+  useEffect(()=>{
+    localStorage.removeItem("signupInProgress");
+  }, [])
 
   const handleLogout = async () => {
     try {

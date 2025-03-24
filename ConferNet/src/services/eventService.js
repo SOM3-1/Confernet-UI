@@ -1,6 +1,6 @@
 import {API_URL} from "./../constants/api"
 
-const sampleEvent = {
+const oldSampleEvent = {
     name: "TechConf 2025",
     description: "An event for tech enthusiasts",
     startDate: "2025-06-01",
@@ -23,7 +23,6 @@ const sampleEvent = {
     paymentMethods: "Credit Card, PayPal, Stripe",
     maxAttendees: 300
   };
-  
 
 export const createEvent = async (eventData) => {
   const response = await fetch(`${API_URL}/events`, {
