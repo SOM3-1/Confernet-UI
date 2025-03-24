@@ -19,18 +19,25 @@ export const AuthListener = () => {
     return () => unsubscribe();
   }, []);
 
+  const isSignupPending = localStorage.getItem("signupInProgress") === "true";
+
   useEffect(() => {
     if (!authChecked) return;
-
+  
     const publicRoutes = ["/", "/login", "/signup"];
     const isPublic = publicRoutes.includes(location.pathname);
-
-    if (user && isPublic) {
-      navigate("/home", { replace: true });
-    } else if (!user && !isPublic) {
-      navigate("/login", { replace: true });
-    }
+  
+    const timeout = setTimeout(() => {
+      if (user && isPublic && !isSignupPending) {
+        navigate("/home", { replace: true });
+      } else if (!user && !isPublic) {
+        navigate("/login", { replace: true });
+      }
+    }, isSignupPending ? 1000 : 0);
+  
+    return () => clearTimeout(timeout);
   }, [authChecked, user, location.pathname, navigate]);
+  
 
   if (!authChecked) return <LoadingSpinner />;
 

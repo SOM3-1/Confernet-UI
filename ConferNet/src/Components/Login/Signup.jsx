@@ -54,6 +54,7 @@ function Signup() {
         password
       );
       const userId = userCredential.user.uid;
+      localStorage.setItem("signupInProgress", "true");
 
       localStorage.setItem("userName", name);
       localStorage.setItem("role", role);
@@ -74,9 +75,14 @@ function Signup() {
         null
       );
 
-      setMessage(`Welcome, ${userName}! Signup successful. Redirecting to home...`);
+      setMessage(`Welcome, ${name}! Signup successful. Redirecting to home...`);
       setAlertType("success");
       setOpenSnackbar(true);
+      setTimeout(() => {
+        localStorage.removeItem("signupInProgress");
+        navigate("/home");
+      }, 1000);
+      
     } catch (error) {
       setMessage(error.message || "Signup failed. Please try again.");
       setAlertType("error");
