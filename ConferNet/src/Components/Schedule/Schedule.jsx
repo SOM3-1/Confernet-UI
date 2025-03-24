@@ -41,6 +41,7 @@ function Schedule({ onSelectEvent }) {
     setLoading(true)
     try {
       const upcoming = await getUpcomingEvents();
+      console.log(upcoming)
       setEvents(upcoming);
       await fetchUserPreferences(); 
     } catch (err) {
@@ -150,7 +151,8 @@ function Schedule({ onSelectEvent }) {
                     <Box>
                       <Typography variant="h6">{event.name}</Typography>
                       <Typography variant="body2">
-                        {new Date(event.startDate.seconds * 1000).toLocaleString()} → {new Date(event.endDate.seconds * 1000).toLocaleString()}
+                      {new Date((event.startDate._seconds || event.startDate.seconds || 0) * 1000).toLocaleString()} →
+                      {new Date((event.endDate._seconds || event.endDate.seconds || 0) * 1000).toLocaleString()}
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
                         {event.city}, {event.country}

@@ -4,6 +4,7 @@ import VenueMap from "../Schedule/VenueMap";
 import Account from "../Account/Account";
 import People from "../People/People";
 import EventDetails from "../Event/EventDetails";
+import Messages from "../Messages/Message";
 
 const ContentView = ({ selectedTab, selectedEventId, onSelectEvent, onBack }) => {
   if (selectedTab === "Home") {
@@ -23,6 +24,8 @@ const ContentView = ({ selectedTab, selectedEventId, onSelectEvent, onBack }) =>
       return <Account />;
     case "People":
       return <People />;
+      case "Message":
+        return <Messages/>
     default:
       return null;
   }

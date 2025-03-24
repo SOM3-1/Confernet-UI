@@ -10,6 +10,7 @@ import {
   import HomeIcon from "@mui/icons-material/Home";
   import AccountCircleIcon from "@mui/icons-material/AccountCircle";
   import PeopleIcon from "@mui/icons-material/People";
+  import ChatIcon from "@mui/icons-material/Chat";
   
   const drawerWidth = 240;
   
@@ -35,6 +36,7 @@ import {
           { label: "Home", icon: <HomeIcon /> },
           { label: "Account", icon: <AccountCircleIcon /> },
           { label: "People", icon: <PeopleIcon /> },
+          { label: "Messages", icon: <ChatIcon /> },
         ].map(({ label, icon }) => (
           <ListItem
             button
