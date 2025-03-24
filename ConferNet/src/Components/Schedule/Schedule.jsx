@@ -27,6 +27,7 @@ import {
   getBookmarkedEvents,
   getRegisteredEvents,
 } from "../../services/userService";
+import { LoadingSpinner } from "../Loading/LoadingSpinner";
 
 function Schedule({ onSelectEvent }) {
   const [events, setEvents] = useState([]);
@@ -34,14 +35,19 @@ function Schedule({ onSelectEvent }) {
   const [joined, setJoined] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
+  const [loading, setLoading] = useState(false)
 
   const fetchEvents = async () => {
+    setLoading(true)
     try {
       const upcoming = await getUpcomingEvents();
       setEvents(upcoming);
-      await fetchUserPreferences(); // Fetch bookmarks/joined again
+      await fetchUserPreferences(); 
     } catch (err) {
       console.error(err);
+    }
+    finally{
+      setLoading(false)
     }
   };
 
@@ -105,10 +111,10 @@ function Schedule({ onSelectEvent }) {
   );
 
   return (
+    <>
     <Grow in timeout={500}>
       <Card sx={{ mb: 3 }}>
         <CardContent>
-          {/* Search & Refresh */}
           <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
             <TextField
               placeholder="Search events..."
@@ -168,8 +174,7 @@ function Schedule({ onSelectEvent }) {
                     </Box>
                   </Box>
 
-                  {/* Footer: View Details */}
-                  <Box mt={2}>
+                  <Box mt={2} display="flex" justifyContent="flex-end">
                     <Button
                       startIcon={<VisibilityIcon />}
                       variant="contained"
@@ -194,6 +199,9 @@ function Schedule({ onSelectEvent }) {
         </Snackbar>
       </Card>
     </Grow>
+
+    {loading && <LoadingSpinner/>}
+    </>
   );
 }
 
