@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
   Dialog, DialogTitle, DialogContent, Stepper, Step, StepLabel,
-  Button, TextField, MenuItem, Box, Grid, CircularProgress, Snackbar, Alert
+  Button, TextField, MenuItem, Box, Grid, CircularProgress, Snackbar, Alert, FormControlLabel, Checkbox
 } from '@mui/material';
 import { getUsersByRoleId } from './../../services/usersByRoles';
 import { createEvent } from './../../services/eventService';
@@ -10,21 +10,22 @@ import { LoadingSpinner } from '../Loading/LoadingSpinner';
 
 const steps = ['Basic Info', 'Speakers & Moderators', 'Registration'];
 
+const LOCATION_OPTIONS = [
+  'New York', 'San Francisco', 'Los Angeles', 'Chicago', 'Houston',
+  'Seattle', 'Boston', 'Denver', 'Miami', 'Atlanta',
+  'Dallas', 'Orlando', 'Las Vegas', 'Austin', 'San Diego',
+  'Washington D.C.', 'Portland', 'Phoenix', 'Philadelphia', 'Detroit'
+];
+
 export const CreateEventModal = ({ open, onClose }) => {
   const [activeStep, setActiveStep] = useState(0);
   const [keynoteSpeakers, setKeynoteSpeakers] = useState([]);
   const [moderators, setModerators] = useState([]);
   const [formData, setFormData] = useState({
-    name: '',
-    startDate: '',
-    endDate: '',
-    venue: '',
-    city: '',
-    keynoteSpeaker: '',
-    moderator: '',
-    registrationFee: '',
-    currency: 'USD',
-    paymentMethods: 'Cash',
+    name: '', startDate: '', endDate: '', venue: '', city: '',
+    keynoteSpeaker: '', moderator: '', registrationFee: '', currency: 'USD', paymentMethods: 'Cash',
+    address: '', country: '', venueMapUrl: '', isOnline: false,
+    streamUrl: '', maxAttendees: 20, announcement: ''
   });
   const [loading, setLoading] = useState(false);
   const [loadingPeople, setLoadingPeople] = useState(false);
@@ -51,24 +52,18 @@ export const CreateEventModal = ({ open, onClose }) => {
   useEffect(() => {
     if (!open) {
       setFormData({
-        name: '',
-        startDate: '',
-        endDate: '',
-        venue: '',
-        city: '',
-        keynoteSpeaker: '',
-        moderator: '',
-        registrationFee: '',
-        currency: 'USD',
-        paymentMethods: 'Cash',
+        name: '', startDate: '', endDate: '', venue: '', city: '',
+        keynoteSpeaker: '', moderator: '', registrationFee: '', currency: 'USD', paymentMethods: 'Cash',
+        address: '', country: '', venueMapUrl: '', isOnline: false,
+        streamUrl: '', maxAttendees: '', announcement: ''
       });
       setActiveStep(0);
     }
   }, [open]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: String(value) }));
+    const { name, value, type, checked } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: type === 'checkbox' ? checked : String(value) }));
   };
 
   const validateStep = () => {
@@ -102,7 +97,6 @@ export const CreateEventModal = ({ open, onClose }) => {
     setLoading(true);
     try {
       const organizer = await getUserById();
-      console.log(organizer)
       if (!organizer?.id || !organizer?.name) throw new Error('Organizer details not found');
 
       const payload = {
@@ -111,6 +105,13 @@ export const CreateEventModal = ({ open, onClose }) => {
         endDate: formData.endDate,
         venue: formData.venue,
         city: formData.city,
+        address: formData.address,
+        country: formData.country,
+        venueMapUrl: formData.venueMapUrl,
+        isOnline: formData.isOnline,
+        streamUrl: formData.streamUrl,
+        maxAttendees: formData.maxAttendees ? Number(formData.maxAttendees) : null,
+        announcement: formData.announcement,
         registrationFee: Number(formData.registrationFee),
         currency: formData.currency,
         paymentMethods: formData.paymentMethods,
@@ -121,9 +122,7 @@ export const CreateEventModal = ({ open, onClose }) => {
         contactEmail: organizer.email || '',
         createdAt: new Date().toISOString(),
       };
-      console.log(payload)
-
-      await createEvent(payload);
+     await createEvent(payload);
       setSnackbar({ open: true, message: 'Event created successfully!', severity: 'success' });
       onClose();
     } catch (err) {
@@ -144,43 +143,28 @@ export const CreateEventModal = ({ open, onClose }) => {
             <Grid item xs={6}><TextField label="End Date & Time" name="endDate" type="datetime-local" required fullWidth InputLabelProps={{ shrink: true }} onChange={handleChange} value={formData.endDate} /></Grid>
             <Grid item xs={6}><TextField label="Venue" name="venue" fullWidth onChange={handleChange} value={formData.venue} /></Grid>
             <Grid item xs={6}><TextField label="City" name="city" fullWidth onChange={handleChange} value={formData.city} /></Grid>
+            <Grid item xs={6}><TextField label="Address" name="address" fullWidth onChange={handleChange} value={formData.address} /></Grid>
+            <Grid item xs={6}><TextField label="Country" name="country" fullWidth onChange={handleChange} value={formData.country} /></Grid>
+            <Grid item xs={12}><TextField select label="Venue Map URL" name="venueMapUrl" fullWidth value={formData.venueMapUrl} onChange={handleChange}><MenuItem value="" disabled>Select a location</MenuItem>{LOCATION_OPTIONS.map(loc => (<MenuItem key={loc} value={`https://maps.google.com/?q=${encodeURIComponent(loc)}`}>{loc}</MenuItem>))}</TextField></Grid>
+            <Grid item xs={6}><TextField label="Stream URL" name="streamUrl" fullWidth onChange={handleChange} value={formData.streamUrl} /></Grid>
+            <Grid item xs={6}><TextField label="Max Attendees" name="maxAttendees" type="number" fullWidth onChange={handleChange} value={formData.maxAttendees} /></Grid>
+            <Grid item xs={12}><TextField label="Announcement" name="announcement" fullWidth multiline rows={2} onChange={handleChange} value={formData.announcement} /></Grid>
+            <Grid item xs={12}><FormControlLabel control={<Checkbox checked={formData.isOnline} onChange={handleChange} name="isOnline" />} label="Is Online Event?" /></Grid>
           </Grid>
         );
       case 1:
         return (
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <TextField
-                select
-                label="Keynote Speaker"
-                name="keynoteSpeaker"
-                value={formData.keynoteSpeaker}
-                fullWidth
-                onChange={handleChange}
-              >
+              <TextField select label="Keynote Speaker" name="keynoteSpeaker" value={formData.keynoteSpeaker} fullWidth onChange={handleChange}>
                 <MenuItem value="" disabled>Select a keynote speaker</MenuItem>
-                {keynoteSpeakers.map((user) => (
-                  <MenuItem key={user.userId} value={String(user.userId)}>
-                    {user.name || user.email || 'Unnamed'}
-                  </MenuItem>
-                ))}
+                {keynoteSpeakers.map(user => (<MenuItem key={user.userId} value={String(user.userId)}>{user.name || user.email || 'Unnamed'}</MenuItem>))}
               </TextField>
             </Grid>
             <Grid item xs={12}>
-              <TextField
-                select
-                label="Moderator"
-                name="moderator"
-                fullWidth
-                value={formData.moderator}
-                onChange={handleChange}
-              >
+              <TextField select label="Moderator" name="moderator" fullWidth value={formData.moderator} onChange={handleChange}>
                 <MenuItem value="" disabled>Select a moderator</MenuItem>
-                {moderators.map((user) => (
-                  <MenuItem key={user.userId} value={String(user.userId)}>
-                    {user.name || user.email || 'Unnamed'}
-                  </MenuItem>
-                ))}
+                {moderators.map(user => (<MenuItem key={user.userId} value={String(user.userId)}>{user.name || user.email || 'Unnamed'}</MenuItem>))}
               </TextField>
             </Grid>
           </Grid>
@@ -190,26 +174,13 @@ export const CreateEventModal = ({ open, onClose }) => {
           <Grid container spacing={2}>
             <Grid item xs={6}><TextField label="Registration Fee" name="registrationFee" type="number" fullWidth onChange={handleChange} value={formData.registrationFee} /></Grid>
             <Grid item xs={6}><TextField label="Currency" name="currency" fullWidth value={formData.currency} onChange={handleChange} /></Grid>
-            <Grid item xs={12}>
-              <TextField
-                select
-                label="Payment Method"
-                name="paymentMethods"
-                fullWidth
-                value={formData.paymentMethods}
-                onChange={handleChange}
-              >
-                <MenuItem value="Cash">Cash</MenuItem>
-                <MenuItem value="Stripe">Stripe</MenuItem>
-                <MenuItem value="PayPal">PayPal</MenuItem>
-              </TextField>
-            </Grid>
+            <Grid item xs={12}><TextField select label="Payment Method" name="paymentMethods" fullWidth value={formData.paymentMethods} onChange={handleChange}><MenuItem value="Cash">Cash</MenuItem><MenuItem value="Stripe">Stripe</MenuItem><MenuItem value="PayPal">PayPal</MenuItem></TextField></Grid>
           </Grid>
         );
       default:
         return null;
     }
-  };
+  }
 
   return (
     <>
