@@ -51,14 +51,14 @@ export const getUpcomingEvents = async () => {
 };
 
 export const getEventById = async (eventId) => {
-  const response = await fetch(`${API_URL}/events/${eventId}`);
+  const response = await fetch(`${API_URL}/events/singleEvent/${eventId}`);
   const data = await response.json();
   if (!response.ok) throw new Error(data.error || "Event not found");
   return data;
 };
 
 export const updateEvent = async (eventId, updates) => {
-  const response = await fetch(`${API_URL}/events/${eventId}`, {
+  const response = await fetch(`${API_URL}/events/singleEvent/${eventId}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(updates),
@@ -70,7 +70,7 @@ export const updateEvent = async (eventId, updates) => {
 };
 
 export const deleteEvent = async (eventId) => {
-  const response = await fetch(`${API_URL}/events/${eventId}`, {
+  const response = await fetch(`${API_URL}/events/singleEvent/${eventId}`, {
     method: "DELETE",
   });
 

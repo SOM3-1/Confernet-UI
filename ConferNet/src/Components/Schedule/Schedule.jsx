@@ -5,121 +5,193 @@ import {
   Typography,
   Button,
   Box,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  TextField,
+  IconButton,
   Snackbar,
   Alert,
-  Grow
+  Grow,
+  TextField,
+  InputAdornment,
+  Tooltip
 } from "@mui/material";
+import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
+import BookmarkIcon from "@mui/icons-material/Bookmark";
+import SearchIcon from "@mui/icons-material/Search";
+import RefreshIcon from "@mui/icons-material/Refresh";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import { getUpcomingEvents } from "../../services/eventService";
+import {
+  bookmarkEvent,
+  removeBookmarkedEvent,
+  getUserId,
+  joinEvent,
+  getBookmarkedEvents,
+  getRegisteredEvents,
+} from "../../services/userService";
 
-function Schedule() {
-  const allEvents = [
-    "09:30 AM - Registration & Welcome",
-    "10:00 AM - Opening Keynote by Dr. Jane Smith",
-    "12:00 PM - Lunch Break",
-    "01:30 PM - Panel: Future of AI",
-    "03:00 PM - Networking Session"
-  ];
+function Schedule({ onSelectEvent }) {
+  const [events, setEvents] = useState([]);
+  const [bookmarked, setBookmarked] = useState([]);
+  const [joined, setJoined] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
 
-  const [openDialog, setOpenDialog] = useState(false);
-  const [inviteEmail, setInviteEmail] = useState("");
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMsg, setSnackbarMsg] = useState("");
-  const [snackbarType, setSnackbarType] = useState("success");
-  const [rsvpedEvents, setRsvpedEvents] = useState([]);
-
-  useEffect(() => {
-    const stored = localStorage.getItem("rsvpedEvents");
-    if (stored) setRsvpedEvents(JSON.parse(stored));
-  }, []);
-
-  const handleOpenDialog = () => setOpenDialog(true);
-  const handleCloseDialog = () => {
-    setInviteEmail("");
-    setOpenDialog(false);
-  };
-
-  const handleInvite = () => {
-    if (inviteEmail.trim()) {
-      alert(`Invitation sent to ${inviteEmail}`);
-      handleCloseDialog();
+  const fetchEvents = async () => {
+    try {
+      const upcoming = await getUpcomingEvents();
+      setEvents(upcoming);
+      await fetchUserPreferences(); // Fetch bookmarks/joined again
+    } catch (err) {
+      console.error(err);
     }
   };
 
-  const handleRSVPClick = (event) => {
-    const updatedEvents = [...rsvpedEvents, event];
-    setRsvpedEvents(updatedEvents);
-    localStorage.setItem("rsvpedEvents", JSON.stringify(updatedEvents));
-    setSnackbarMsg("RSVP successful!");
-    setSnackbarType("success");
-    setSnackbarOpen(true);
+  const fetchUserPreferences = async () => {
+    try {
+      const userId = await getUserId();
+      if (!userId) return;
+
+      const bookmarkedEvents = await getBookmarkedEvents(userId);
+      const registeredEvents = await getRegisteredEvents(userId);
+
+      setBookmarked(bookmarkedEvents.map(e => e.eventId));
+      setJoined(registeredEvents.map(e => e.eventId));
+    } catch (error) {
+      console.error("Error fetching user preferences:", error);
+    }
   };
 
-  const filteredEvents = allEvents.filter(event => !rsvpedEvents.includes(event));
+  const handleBookmarkToggle = async (eventId) => {
+    const userId = await getUserId();
+    if (!userId) return;
+
+    try {
+      if (bookmarked.includes(eventId)) {
+        await removeBookmarkedEvent(userId, eventId);
+        setBookmarked(prev => prev.filter(id => id !== eventId));
+        setSnackbar({ open: true, message: "Event removed from bookmarks", severity: "info" });
+      } else {
+        await bookmarkEvent(userId, eventId);
+        setBookmarked(prev => [...prev, eventId]);
+        setSnackbar({ open: true, message: "Event bookmarked!", severity: "success" });
+      }
+    } catch (err) {
+      setSnackbar({ open: true, message: err.message, severity: "error" });
+    }
+  };
+
+  const handleJoin = async (eventId) => {
+    const userId = await getUserId();
+    if (!userId) return;
+
+    try {
+      await joinEvent(userId, eventId);
+      setJoined(prev => [...prev, eventId]);
+      setSnackbar({ open: true, message: "Successfully joined event", severity: "success" });
+    } catch (err) {
+      setSnackbar({ open: true, message: err.message, severity: "error" });
+    }
+  };
+
+  const handleViewDetails = (eventId) => {
+    onSelectEvent(eventId);
+  };
+
+  useEffect(() => {
+    fetchEvents();
+  }, []);
+
+  const filteredEvents = events.filter((event) =>
+    event.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <Grow in timeout={500}>
       <Card sx={{ mb: 3 }}>
         <CardContent>
-          <Typography variant="h6" gutterBottom>Sessions</Typography>
+          {/* Search & Refresh */}
+          <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+            <TextField
+              placeholder="Search events..."
+              variant="outlined"
+              size="small"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon />
+                  </InputAdornment>
+                ),
+              }}
+              sx={{ width: "70%" }}
+            />
+            <Tooltip title="Refresh Events">
+              <IconButton onClick={fetchEvents}>
+                <RefreshIcon />
+              </IconButton>
+            </Tooltip>
+          </Box>
+
+          {/* Event Cards */}
           {filteredEvents.length === 0 ? (
-            <Typography>All available sessions are in your schedule.</Typography>
+            <Typography>No events to register</Typography>
           ) : (
             filteredEvents.map((event, index) => (
-              <Grow in timeout={300 + index * 100} key={index}>
-                <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", my: 1 }}>
-                  <Typography>{event}</Typography>
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    size="small"
-                    onClick={() => handleRSVPClick(event)}
-                  >
-                    RSVP
-                  </Button>
-                </Box>
+              <Grow in timeout={300 + index * 100} key={event.eventId}>
+                <Card variant="outlined" sx={{ my: 2, p: 2 }}>
+                  {/* Header: Title + Actions */}
+                  <Box display="flex" justifyContent="space-between" alignItems="flex-start">
+                    <Box>
+                      <Typography variant="h6">{event.name}</Typography>
+                      <Typography variant="body2">
+                        {new Date(event.startDate.seconds * 1000).toLocaleString()} → {new Date(event.endDate.seconds * 1000).toLocaleString()}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        {event.city}, {event.country}
+                      </Typography>
+                    </Box>
+
+                    <Box display="flex" gap={1}>
+                      <Tooltip title={bookmarked.includes(event.eventId) ? "Remove Bookmark" : "Bookmark"}>
+                        <IconButton onClick={() => handleBookmarkToggle(event.eventId)} color={bookmarked.includes(event.eventId) ? "primary" : "default"}>
+                          {bookmarked.includes(event.eventId) ? <BookmarkIcon /> : <BookmarkBorderIcon />}
+                        </IconButton>
+                      </Tooltip>
+                      <Button
+                        variant="outlined"
+                        size="small"
+                        onClick={() => handleJoin(event.eventId)}
+                        disabled={joined.includes(event.eventId)}
+                      >
+                        {joined.includes(event.eventId) ? "Joined" : "Join"}
+                      </Button>
+                    </Box>
+                  </Box>
+
+                  {/* Footer: View Details */}
+                  <Box mt={2}>
+                    <Button
+                      startIcon={<VisibilityIcon />}
+                      variant="contained"
+                      size="small"
+                      onClick={() => handleViewDetails(event.eventId)}
+                    >
+                      View More Details
+                    </Button>
+                  </Box>
+                </Card>
               </Grow>
             ))
           )}
-
-          <Box sx={{ display: "flex", gap: 2, mt: 3 }}>
-            <Button variant="outlined" color="secondary" onClick={handleOpenDialog}>Invite People</Button>
-          </Box>
-
-          <Dialog open={openDialog} onClose={handleCloseDialog}>
-            <DialogTitle>Invite Someone to an Event</DialogTitle>
-            <DialogContent>
-              <TextField
-                autoFocus
-                margin="dense"
-                label="Email Address"
-                type="email"
-                fullWidth
-                variant="outlined"
-                value={inviteEmail}
-                onChange={(e) => setInviteEmail(e.target.value)}
-              />
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleCloseDialog}>Cancel</Button>
-              <Button onClick={handleInvite} variant="contained">Send Invite</Button>
-            </DialogActions>
-          </Dialog>
-
-          <Snackbar
-            open={snackbarOpen}
-            autoHideDuration={3000}
-            onClose={() => setSnackbarOpen(false)}
-            anchorOrigin={{ vertical: "top", horizontal: "center" }}
-          >
-            <Alert onClose={() => setSnackbarOpen(false)} severity={snackbarType} sx={{ width: "100%" }}>
-              {snackbarMsg}
-            </Alert>
-          </Snackbar>
         </CardContent>
+        <Snackbar
+          open={snackbar.open}
+          autoHideDuration={3000}
+          onClose={() => setSnackbar({ ...snackbar, open: false })}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        >
+          <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
+        </Snackbar>
       </Card>
     </Grow>
   );

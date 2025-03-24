@@ -16,6 +16,8 @@ const Home = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [selectedTab, setSelectedTab] = useState("Home");
   const [snackbar, setSnackbar] = useState({ open: false, message: "", type: "success" });
+  const [selectedEventId, setSelectedEventId] = useState(null);
+
 
   useEffect(()=>{
     localStorage.removeItem("signupInProgress");
@@ -46,7 +48,13 @@ const Home = () => {
       />
       <Box component="main" sx={{ flexGrow: 1, p: 3, mt: 8 }}>
         <Container>
-          <ContentView selectedTab={selectedTab} />
+        <ContentView
+  selectedTab={selectedTab}
+  selectedEventId={selectedEventId}
+  onSelectEvent={setSelectedEventId}
+  onBack={() => setSelectedEventId(null)}
+/>
+
         </Container>
       </Box>
       {selectedTab === "Home" && (
