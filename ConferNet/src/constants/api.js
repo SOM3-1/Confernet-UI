@@ -1,1 +1,1 @@
-export const API_URL = 'http://yourip:5003';
+export const API_URL = 'https://confernet-api-grdagtb3cadsb9fv.canadacentral-01.azurewebsites.net';
