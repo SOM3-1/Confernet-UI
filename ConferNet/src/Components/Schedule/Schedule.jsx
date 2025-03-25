@@ -245,7 +245,7 @@ function Schedule({ onSelectEvent }) {
         }}
         eventData={selectedEvent}
       />
-       <CreateEventButton />
+       <CreateEventButton handleClose={fetchEvents}/>
     </>
   );
 }

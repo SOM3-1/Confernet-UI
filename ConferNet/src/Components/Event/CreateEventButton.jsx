@@ -7,8 +7,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './../../firebase/firebaseConfig';
 import { CreateEventModal } from './CreateEventModal';
 
-export const CreateEventButton = () => {
-  const navigate = useNavigate();
+export const CreateEventButton = ({handleClose}) => {
   const [isOrganizer, setIsOrganizer] = useState(false);
   const [openModal, setOpenModal] = useState(false);
 
@@ -100,7 +99,9 @@ export const CreateEventButton = () => {
           Create Event
         </Typography>
       </Box>
-      <CreateEventModal open={openModal} onClose={() => setOpenModal(false)} />
+      <CreateEventModal open={openModal} onClose={() => {setOpenModal(false);
+        handleClose();
+      }} />
     </Box>
   );
 };

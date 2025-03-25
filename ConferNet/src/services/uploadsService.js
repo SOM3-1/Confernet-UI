@@ -32,5 +32,12 @@ export const getUploadedFiles = async (eventId) => {
   const response = await fetch(`${API_URL}/uploads/files/${eventId}`);
   const data = await response.json();
   if (!response.ok) throw new Error(data.error || "Failed to fetch files");
-  return data.files;
+
+  const grouped = {};
+  for (const file of data.files) {
+    if (!grouped[file.uploadedBy]) grouped[file.uploadedBy] = [];
+    grouped[file.uploadedBy].push(file);
+  }
+
+  return grouped;
 };

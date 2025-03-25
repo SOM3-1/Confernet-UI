@@ -89,7 +89,7 @@ export const getUsersByIds = async (userIds) => {
     throw new Error("userIds must be a non-empty array");
   }
 
-  const response = await fetch(`${API_URL}/users/by-ids`, {
+  const response = await fetch(`${API_URL}/users/multiple-users/by-ids`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

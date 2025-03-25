@@ -29,6 +29,7 @@ import {
 } from "../../services/userService";
 import VenueMap from "../Schedule/VenueMap";
 import { EditEventModal } from "./EditEventModal";
+import EventSpeakers from "./EventSpeakers";
 
 const EventDetails = ({ eventId, onBack }) => {
   const [event, setEvent] = useState(null);
@@ -170,14 +171,7 @@ const EventDetails = ({ eventId, onBack }) => {
           </Card>
         )}
 
-        {tabIndex === 1 && (
-          <Card><CardContent>
-            <Typography variant="h6">Keynote Speakers</Typography>
-            {event.keynoteSpeakers?.length > 0 ? event.keynoteSpeakers.map((sp, i) => (
-              <Typography key={i} variant="body1">- {sp.name || sp}</Typography>
-            )) : <Typography>No speakers listed.</Typography>}
-          </CardContent></Card>
-        )}
+          {tabIndex === 1 && <EventSpeakers speakers={event.keynoteSpeakers} eventId={event.eventId} />}
 
         {tabIndex === 2 && (
           <Card><CardContent>
