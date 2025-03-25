@@ -31,6 +31,7 @@ import {
 import { LoadingSpinner } from "../Loading/LoadingSpinner";
 import { EditEventModal } from "../Event/EditEventModal";
 import { CreateEventButton } from "../Event/CreateEventButton";
+import { useNavigate } from "react-router-dom";
 
 function Schedule({ onSelectEvent }) {
   const [events, setEvents] = useState([]);
@@ -42,6 +43,7 @@ function Schedule({ onSelectEvent }) {
   const [ownedEvents, setOwnedEvents] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const navigate  = useNavigate()
 
   const fetchEvents = async () => {
     setLoading(true)
@@ -123,7 +125,7 @@ function Schedule({ onSelectEvent }) {
   };
 
   const handleViewDetails = (eventId) => {
-    onSelectEvent(eventId);
+    navigate(`/home/${eventId}`)
   };
 
   useEffect(() => {

@@ -1,15 +1,20 @@
 import { useState, useEffect } from "react";
 import {
   Card, CardContent, Typography, TextField,
-  IconButton, Box, Avatar, List, ListItem, ListItemAvatar, ListItemText
+  IconButton, Box, Avatar, List, ListItem, ListItemAvatar, ListItemText, InputAdornment
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import ChatIcon from "@mui/icons-material/Chat";
+import SearchIcon from "@mui/icons-material/Search";
 import { getAllUsers } from "../../services/userService";
+import { LoadingSpinner } from "../Loading/LoadingSpinner";
 
 function People() {
   const [people, setPeople] = useState([]);
+  const [filteredPeople, setFilteredPeople] = useState([]);
   const [messages, setMessages] = useState({});
+  const [searchQuery, setSearchQuery] = useState("");
+  const [loading, setIsLoading] = useState(false);
 
   const getInitials = (name) => {
     if (!name) return "NA";
@@ -18,11 +23,12 @@ function People() {
   };
 
   useEffect(() => {
+    setIsLoading(true);
     const fetchUsers = async () => {
       try {
         const allUsers = await getAllUsers();
         const currentUserId = localStorage.getItem("userId");
-        console.log(allUsers)
+
         const filtered = allUsers
           .filter(user => user.id !== currentUserId)
           .map(user => ({
@@ -44,13 +50,27 @@ function People() {
           }));
 
         setPeople(filtered);
+        setFilteredPeople(filtered);
       } catch (err) {
         console.error("Error fetching users:", err.message);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchUsers();
   }, []);
+
+  useEffect(() => {
+    const query = searchQuery.toLowerCase();
+    const filtered = people.filter(
+      person =>
+        person.name.toLowerCase().includes(query) ||
+        person.jobTitle.toLowerCase().includes(query) ||
+        person.organization.toLowerCase().includes(query)
+    );
+    setFilteredPeople(filtered);
+  }, [searchQuery, people]);
 
   const handleSend = (id) => {
     if (messages[id]?.trim()) {
@@ -68,8 +88,24 @@ function People() {
       <CardContent>
         <Typography variant="h6" gutterBottom>Networking</Typography>
 
+        <TextField
+          fullWidth
+          variant="outlined"
+          placeholder="Search people by name, job, or organization..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          sx={{ mb: 3 }}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
+        />
+
         <List>
-          {people.map(person => (
+          {filteredPeople.map(person => (
             <ListItem key={person.id} alignItems="flex-start" sx={{ flexDirection: 'column', alignItems: 'stretch', mb: 2 }}>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <ListItemAvatar>
@@ -102,6 +138,7 @@ function People() {
           ))}
         </List>
       </CardContent>
+      {loading && <LoadingSpinner />}
     </Card>
   );
 }

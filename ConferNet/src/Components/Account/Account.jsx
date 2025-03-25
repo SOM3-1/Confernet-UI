@@ -3,13 +3,12 @@ import {
   Typography,
   Card,
   CardContent,
-  CircularProgress,
   Avatar,
   Box,
   Divider,
   Grid,
   Tabs,
-  Tab,
+  Tab, Button
 } from "@mui/material";
 import {
   Email as EmailIcon,
@@ -21,12 +20,16 @@ import {
   Work as WorkIcon,
   CalendarMonth as CalendarMonthIcon,
 } from "@mui/icons-material";
+
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import {
   getUserById,
   getUserId,
   getBookmarkedEvents,
   getRegisteredEvents,
 } from "../../services/userService";
+import { LoadingSpinner } from "../Loading/LoadingSpinner";
+import { useNavigate } from "react-router-dom"; 
 
 function Account() {
   const [userData, setUserData] = useState(null);
@@ -40,6 +43,7 @@ function Account() {
     const parts = name.trim().split(" ");
     return parts.slice(0, 2).map(p => p[0].toUpperCase()).join("");
   };
+
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -61,7 +65,7 @@ function Account() {
     fetchUserData();
   }, []);
 
-  if (loading) return <CircularProgress sx={{ mt: 4 }} />;
+  if (loading) return <LoadingSpinner/>;
   if (!userData) return <Typography sx={{ mt: 4 }} color="error">Could not load user data.</Typography>;
 
   return (
@@ -115,7 +119,14 @@ const InfoRow = ({ icon, label, value }) => (
   </Grid>
 );
 
+
 function EventList({ events, title }) {
+  const navigate = useNavigate();
+
+  const handleViewDetails = (eventId) => {
+    navigate(`/home/${eventId}`)
+  };
+
   if (!events || !events.length) {
     return <Typography>No events to display.</Typography>;
   }
@@ -126,14 +137,32 @@ function EventList({ events, title }) {
       <Grid container spacing={2}>
         {events.map((event) => (
           <Grid item xs={12} md={6} key={event.eventId}>
-            <Card>
+            <Card 
+              sx={{ cursor: "pointer", transition: "0.3s", "&:hover": { boxShadow: 6 } }}
+            >
               <CardContent>
-                <Typography variant="h6">{event.name}</Typography>
-                <Typography variant="body2" color="text.secondary">{event.city}, {event.country}</Typography>
-                <Typography variant="body2">
-                  {new Date(event.startDate._seconds * 1000).toLocaleDateString()} -{" "}
-                  {new Date(event.endDate._seconds * 1000).toLocaleDateString()}
-                </Typography>
+                <Box display="flex" justifyContent="space-between" alignItems="center">
+                  <Box>
+                    <Typography variant="h6">{event.name}</Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {event.city}, {event.country}
+                    </Typography>
+                    <Typography variant="body2">
+                      {new Date(event.startDate._seconds * 1000).toLocaleDateString()} -{" "}
+                      {new Date(event.endDate._seconds * 1000).toLocaleDateString()}
+                    </Typography>
+                  </Box>
+                  <Box mt={2} display="flex" justifyContent="flex-end">
+                      <Button
+                        startIcon={<VisibilityIcon />}
+                        variant="contained"
+                        size="small"
+                        onClick={() => handleViewDetails(event.eventId)}
+                      >
+                        View More Details
+                      </Button>
+                    </Box>
+                </Box>
               </CardContent>
             </Card>
           </Grid>
@@ -142,6 +171,7 @@ function EventList({ events, title }) {
     </>
   );
 }
+
 
 function roleToLabel(role) {
   switch (role) {

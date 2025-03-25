@@ -15,7 +15,6 @@ import {
 } from '@mui/material';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
-import RoomIcon from '@mui/icons-material/Room';
 import { LoadingSpinner } from "../Loading/LoadingSpinner";
 import {
   getUserId,
@@ -31,6 +30,7 @@ import VenueMap from "../Schedule/VenueMap";
 import { EditEventModal } from "./EditEventModal";
 import EventSpeakers from "./EventSpeakers";
 import EventAttendees from "./EventAttendees";
+import { useNavigate } from "react-router-dom";
 
 const EventDetails = ({ eventId, onBack }) => {
   const [event, setEvent] = useState(null);
@@ -42,6 +42,7 @@ const EventDetails = ({ eventId, onBack }) => {
   const [openModal, setOpenModal] = useState(false);
   const [currentUserId, setCurrentUserId] = useState(null);
   const [isOrganizer, setIsOrganizer] = useState(false);
+  const navigate = useNavigate();
 
   const fetchDetails = async () => {
     const data = await getEventById(eventId);
@@ -111,9 +112,17 @@ const EventDetails = ({ eventId, onBack }) => {
 
   if (!event) return <LoadingSpinner />;
 
+  const handleBack = () => {
+    if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate("/home"); 
+    }
+  };
+
   return (
     <Box>
-      <Button onClick={onBack} variant="outlined" sx={{ mb: 2 }}>← Back to Home</Button>
+       <Button onClick={handleBack} variant="outlined" sx={{ mb: 2 }}>← Back</Button>
 
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Typography variant="h4">{event.name}</Typography>

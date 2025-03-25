@@ -1,33 +1,21 @@
+import { useParams, useLocation } from "react-router-dom";
 import Schedule from "../Schedule/Schedule";
-import MySchedule from "../Schedule/MySchedule";
-import VenueMap from "../Schedule/VenueMap";
 import Account from "../Account/Account";
 import People from "../People/People";
 import EventDetails from "../Event/EventDetails";
 import Messages from "../Messages/Message";
 
-const ContentView = ({ selectedTab, selectedEventId, onSelectEvent, onBack }) => {
-  if (selectedTab === "Home") {
-    return selectedEventId ? (
-      <EventDetails eventId={selectedEventId} onBack={onBack} />
-    ) : (
-      <>
-        <Schedule onSelectEvent={onSelectEvent} />
-        <MySchedule />
-      </>
-    );
-  }
+const ContentView = () => {
+  const { eventId } = useParams();
+  const location = useLocation();
 
-  switch (selectedTab) {
-    case "Account":
-      return <Account />;
-    case "People":
-      return <People />;
-      case "Message":
-        return <Messages/>
-    default:
-      return null;
-  }
+  if (location.pathname === "/home") return <Schedule />;
+  if (location.pathname.startsWith("/home/") && eventId) return <EventDetails eventId={eventId} />;
+  if (location.pathname === "/home/account") return <Account />;
+  if (location.pathname === "/home/people") return <People />;
+  if (location.pathname === "/home/messages") return <Messages />;
+
+  return null;
 };
 
 export default ContentView;

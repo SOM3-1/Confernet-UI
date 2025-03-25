@@ -8,7 +8,6 @@ import Header from "./Header";
 import Sidebar from "./Sidebar";
 import ContentView from "./ContentView";
 import SnackbarAlert from "./SnackbarAlert";
-import { CreateEventButton } from "../Event/CreateEventButton";
 
 const Home = () => {
   const navigate = useNavigate();
