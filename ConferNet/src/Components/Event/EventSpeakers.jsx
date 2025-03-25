@@ -7,13 +7,14 @@ import UploadFileIcon from "@mui/icons-material/UploadFile";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import { getUserId, getUsersByIds } from "../../services/userService";
 import { getUploadedFiles, uploadSpeakerFile } from "../../services/uploadsService";
+import { LoadingSpinner } from "../Loading/LoadingSpinner";
 
 const EventSpeakers = ({ speakers = [], eventId }) => {
   const [speakerDetails, setSpeakerDetails] = useState([]);
   const [uploadedFiles, setUploadedFiles] = useState({});
   const [currentUserId, setCurrentUserId] = useState(null);
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
-  const [isLoading, setIsLoading] = useState({ open: false, message: "", severity: "success" });
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const loadSpeakers = async () => {
@@ -159,6 +160,7 @@ const EventSpeakers = ({ speakers = [], eventId }) => {
       >
         <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
       </Snackbar>
+      {isLoading && <LoadingSpinner/>}
     </Box>
   );
 };

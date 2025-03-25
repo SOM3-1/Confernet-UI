@@ -78,3 +78,10 @@ export const deleteEvent = async (eventId) => {
   if (!response.ok) throw new Error(data.error || "Failed to delete event");
   return data;
 };
+
+export const getEventAttendees = async (eventId) => {
+  const response = await fetch(`${API_URL}/events/${eventId}/attendees`);
+  const data = await response.json();
+  if (!response.ok) throw new Error(data.error || "Failed to fetch attendees");
+  return data.userIds;
+};

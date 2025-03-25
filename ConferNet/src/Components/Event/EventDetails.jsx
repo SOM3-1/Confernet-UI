@@ -30,6 +30,7 @@ import {
 import VenueMap from "../Schedule/VenueMap";
 import { EditEventModal } from "./EditEventModal";
 import EventSpeakers from "./EventSpeakers";
+import EventAttendees from "./EventAttendees";
 
 const EventDetails = ({ eventId, onBack }) => {
   const [event, setEvent] = useState(null);
@@ -146,7 +147,8 @@ const EventDetails = ({ eventId, onBack }) => {
       <Tabs value={tabIndex} onChange={(e, newValue) => setTabIndex(newValue)} sx={{ mt: 3 }} textColor="primary" indicatorColor="primary">
         <Tab label="Details" />
         <Tab label="Speakers" />
-        <Tab label="Attendees" />
+        {isOrganizer && <Tab label="Attendees" />}
+        <Tab label="Support" />
       </Tabs>
 
       <Box mt={3}>
@@ -174,10 +176,7 @@ const EventDetails = ({ eventId, onBack }) => {
           {tabIndex === 1 && <EventSpeakers speakers={event.keynoteSpeakers} eventId={event.eventId} />}
 
         {tabIndex === 2 && (
-          <Card><CardContent>
-            <Typography variant="h6">Registered Attendees</Typography>
-            <Typography variant="body2">Coming soon...</Typography>
-          </CardContent></Card>
+         <EventAttendees eventId={event.eventId}/>
         )}
 
         {tabIndex === 3 && (
