@@ -30,6 +30,7 @@ import {
 } from "../../services/userService";
 import { LoadingSpinner } from "../Loading/LoadingSpinner";
 import { EditEventModal } from "../Event/EditEventModal";
+import { CreateEventButton } from "../Event/CreateEventButton";
 
 function Schedule({ onSelectEvent }) {
   const [events, setEvents] = useState([]);
@@ -244,6 +245,7 @@ function Schedule({ onSelectEvent }) {
         }}
         eventData={selectedEvent}
       />
+       <CreateEventButton />
     </>
   );
 }

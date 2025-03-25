@@ -19,7 +19,7 @@ const Home = () => {
   const [selectedEventId, setSelectedEventId] = useState(null);
 
 
-  useEffect(()=>{
+  useEffect(() => {
     localStorage.removeItem("signupInProgress");
   }, [])
 
@@ -48,18 +48,15 @@ const Home = () => {
       />
       <Box component="main" sx={{ flexGrow: 1, p: 3, mt: 8 }}>
         <Container>
-        <ContentView
-  selectedTab={selectedTab}
-  selectedEventId={selectedEventId}
-  onSelectEvent={setSelectedEventId}
-  onBack={() => setSelectedEventId(null)}
-/>
+          <ContentView
+            selectedTab={selectedTab}
+            selectedEventId={selectedEventId}
+            onSelectEvent={setSelectedEventId}
+            onBack={() => setSelectedEventId(null)}
+          />
 
         </Container>
       </Box>
-      {selectedTab === "Home" && (
-        <CreateEventButton />
-      )}
       <SnackbarAlert
         open={snackbar.open}
         message={snackbar.message}

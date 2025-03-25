@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Card, CardContent, Typography, Button, Box, TextField, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
 import Schedule from "../Schedule/Schedule";
 import MySchedule from "../Schedule/MySchedule";
-import VenueMap from "../Schedule/VenueMap";
 
 function HomeContent() {
   const [openDialog, setOpenDialog] = useState(false);

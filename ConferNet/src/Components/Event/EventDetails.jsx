@@ -146,8 +146,6 @@ const EventDetails = ({ eventId, onBack }) => {
         <Tab label="Details" />
         <Tab label="Speakers" />
         <Tab label="Attendees" />
-        <Tab label="Support" />
-        {event.venueMapUrl && <Tab icon={<RoomIcon />} label="Map" />}
       </Tabs>
 
       <Box mt={3}>
