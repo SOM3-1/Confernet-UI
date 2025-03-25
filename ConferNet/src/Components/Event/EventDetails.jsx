@@ -28,6 +28,7 @@ import {
   getUserById
 } from "../../services/userService";
 import VenueMap from "../Schedule/VenueMap";
+import { EditEventModal } from "./EditEventModal";
 
 const EventDetails = ({ eventId, onBack }) => {
   const [event, setEvent] = useState(null);
@@ -36,27 +37,33 @@ const EventDetails = ({ eventId, onBack }) => {
   const [joined, setJoined] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
+  const [openModal, setOpenModal] = useState(false);
+  const [currentUserId, setCurrentUserId] = useState(null);
+  const [isOrganizer, setIsOrganizer] = useState(false);
+
+  const fetchDetails = async () => {
+    const data = await getEventById(eventId);
+    setEvent(data);
+
+    const userId = await getUserId();
+    setCurrentUserId(userId);
+    setIsOrganizer(userId === data.organizerId);
+
+    if (userId) {
+      const bookmarkedEvents = await getBookmarkedEvents(userId);
+      const registeredEvents = await getRegisteredEvents(userId);
+
+      setBookmarked(bookmarkedEvents.some(e => e.eventId === eventId));
+      setJoined(registeredEvents.some(e => e.eventId === eventId));
+    }
+
+    if (data?.organizerId) {
+      const organizerData = await getUserById(data.organizerId);
+      setOrganizer(organizerData);
+    }
+  };
 
   useEffect(() => {
-    const fetchDetails = async () => {
-      const data = await getEventById(eventId);
-      setEvent(data);
-
-      const userId = await getUserId();
-      if (userId) {
-        const bookmarkedEvents = await getBookmarkedEvents(userId);
-        const registeredEvents = await getRegisteredEvents(userId);
-
-        setBookmarked(bookmarkedEvents.some(e => e.eventId === eventId));
-        setJoined(registeredEvents.some(e => e.eventId === eventId));
-      }
-
-      if (data?.organizerId) {
-        const organizerData = await getUserById(data.organizerId);
-        setOrganizer(organizerData);
-      }
-    };
-
     if (eventId) fetchDetails();
   }, [eventId]);
 
@@ -114,13 +121,19 @@ const EventDetails = ({ eventId, onBack }) => {
               {bookmarked ? <BookmarkIcon /> : <BookmarkBorderIcon />}
             </IconButton>
           </Tooltip>
-          <Button
-            variant={joined ? "contained" : "outlined"}
-            color={joined ? "error" : "primary"}
-            onClick={handleJoinToggle}
-          >
-            {joined ? "Leave Event" : "Join Event"}
-          </Button>
+          {isOrganizer ? (
+            <Button variant="contained" color="secondary" onClick={() => setOpenModal(true)}>
+              Edit Event
+            </Button>
+          ) : (
+            <Button
+              variant={joined ? "contained" : "outlined"}
+              color={joined ? "error" : "primary"}
+              onClick={handleJoinToggle}
+            >
+              {joined ? "Leave Event" : "Join Event"}
+            </Button>
+          )}
         </Box>
       </Box>
 
@@ -191,6 +204,15 @@ const EventDetails = ({ eventId, onBack }) => {
       >
         <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
       </Snackbar>
+
+      <EditEventModal
+        open={openModal}
+        onClose={() => {
+          setOpenModal(false);
+          fetchDetails();
+        }}
+        eventData={event}
+      />
     </Box>
   );
 };

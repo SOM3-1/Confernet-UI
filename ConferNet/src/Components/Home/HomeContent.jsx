@@ -44,8 +44,6 @@ function HomeContent() {
 
       <MySchedule />
 
-      <VenueMap />
-
       <Dialog open={openDialog} onClose={handleCloseDialog}>
         <DialogTitle>Invite Someone to an Event</DialogTitle>
         <DialogContent>

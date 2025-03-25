@@ -29,6 +29,7 @@ import {
   getRegisteredEvents,
 } from "../../services/userService";
 import { LoadingSpinner } from "../Loading/LoadingSpinner";
+import { EditEventModal } from "../Event/EditEventModal";
 
 function Schedule({ onSelectEvent }) {
   const [events, setEvents] = useState([]);
@@ -36,19 +37,26 @@ function Schedule({ onSelectEvent }) {
   const [joined, setJoined] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const [ownedEvents, setOwnedEvents] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState(null);
 
   const fetchEvents = async () => {
     setLoading(true)
     try {
+      const userId = await getUserId();
       const upcoming = await getUpcomingEvents();
-      console.log(upcoming)
+      const owned = upcoming
+        .filter(e => e.organizerId === userId)
+        .map(e => e.eventId);
+      setOwnedEvents(owned);
       setEvents(upcoming);
-      await fetchUserPreferences(); 
+      await fetchUserPreferences();
     } catch (err) {
       console.error(err);
     }
-    finally{
+    finally {
       setLoading(false)
     }
   };
@@ -90,11 +98,11 @@ function Schedule({ onSelectEvent }) {
   const handleJoinToggle = async (eventId) => {
     const userId = await getUserId();
     if (!userId) return;
-  
+
     if (joined.includes(eventId)) {
       const confirmLeave = window.confirm("Are you sure you want to leave this event?");
       if (!confirmLeave) return;
-  
+
       try {
         await leaveEvent(userId, eventId);
         setJoined((prev) => prev.filter((id) => id !== eventId));
@@ -112,7 +120,7 @@ function Schedule({ onSelectEvent }) {
       }
     }
   };
-  
+
   const handleViewDetails = (eventId) => {
     onSelectEvent(eventId);
   };
@@ -127,95 +135,115 @@ function Schedule({ onSelectEvent }) {
 
   return (
     <>
-    <Grow in timeout={500}>
-      <Card sx={{ mb: 3 }}>
-        <CardContent>
-          <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-            <TextField
-              placeholder="Search events..."
-              variant="outlined"
-              size="small"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon />
-                  </InputAdornment>
-                ),
-              }}
-              sx={{ width: "70%" }}
-            />
-            <Tooltip title="Refresh Events">
-              <IconButton onClick={fetchEvents}>
-                <RefreshIcon />
-              </IconButton>
-            </Tooltip>
-          </Box>
+      <Grow in timeout={500}>
+        <Card sx={{ mb: 3 }}>
+          <CardContent>
+            <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+              <TextField
+                placeholder="Search events..."
+                variant="outlined"
+                size="small"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon />
+                    </InputAdornment>
+                  ),
+                }}
+                sx={{ width: "70%" }}
+              />
+              <Tooltip title="Refresh Events">
+                <IconButton onClick={fetchEvents}>
+                  <RefreshIcon />
+                </IconButton>
+              </Tooltip>
+            </Box>
 
-          {filteredEvents.length === 0 ? (
-            <Typography>No events to register</Typography>
-          ) : (
-            filteredEvents.map((event, index) => (
-              <Grow in timeout={300 + index * 100} key={event.eventId}>
-                <Card variant="outlined" sx={{ my: 2, p: 2 }}>
-                  {/* Header: Title + Actions */}
-                  <Box display="flex" justifyContent="space-between" alignItems="flex-start">
-                    <Box>
-                      <Typography variant="h6">{event.name}</Typography>
-                      <Typography variant="body2">
-                      {new Date((event.startDate._seconds || event.startDate.seconds || 0) * 1000).toLocaleString()} →
-                      {new Date((event.endDate._seconds || event.endDate.seconds || 0) * 1000).toLocaleString()}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        {event.city}, {event.country}
-                      </Typography>
+            {filteredEvents.length === 0 ? (
+              <Typography>No events to register</Typography>
+            ) : (
+              filteredEvents.map((event, index) => (
+                <Grow in timeout={300 + index * 100} key={event.eventId}>
+                  <Card variant="outlined" sx={{ my: 2, p: 2 }}>
+                    <Box display="flex" justifyContent="space-between" alignItems="flex-start">
+                      <Box>
+                        <Typography variant="h6">{event.name}</Typography>
+                        <Typography variant="body2">
+                          {new Date((event.startDate._seconds || event.startDate.seconds || 0) * 1000).toLocaleString()} →
+                          {new Date((event.endDate._seconds || event.endDate.seconds || 0) * 1000).toLocaleString()}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          {event.city}, {event.country}
+                        </Typography>
+                      </Box>
+
+                      <Box display="flex" gap={1}>
+                        <Tooltip title={bookmarked.includes(event.eventId) ? "Remove Bookmark" : "Bookmark"}>
+                          <IconButton onClick={() => handleBookmarkToggle(event.eventId)} color={bookmarked.includes(event.eventId) ? "primary" : "default"}>
+                            {bookmarked.includes(event.eventId) ? <BookmarkIcon /> : <BookmarkBorderIcon />}
+                          </IconButton>
+                        </Tooltip>
+                        {ownedEvents.includes(event.eventId) ? (
+                          <Button
+                            variant="contained"
+                            color="secondary"
+                            onClick={() =>  {setSelectedEvent(event);
+                              setOpenModal(true);}}
+                          >
+                            Edit Event
+                          </Button>
+                        ) : (
+                          <Button
+                            variant={joined.includes(event.eventId) ? "contained" : "outlined"}
+                            size="small"
+                            color={joined.includes(event.eventId) ? "error" : "primary"}
+                            onClick={() => handleJoinToggle(event.eventId)}
+                          >
+                            {joined.includes(event.eventId) ? "Leave Event" : "Join"}
+                          </Button>
+                        )}
+
+                      </Box>
                     </Box>
 
-                    <Box display="flex" gap={1}>
-                      <Tooltip title={bookmarked.includes(event.eventId) ? "Remove Bookmark" : "Bookmark"}>
-                        <IconButton onClick={() => handleBookmarkToggle(event.eventId)} color={bookmarked.includes(event.eventId) ? "primary" : "default"}>
-                          {bookmarked.includes(event.eventId) ? <BookmarkIcon /> : <BookmarkBorderIcon />}
-                        </IconButton>
-                      </Tooltip>
+                    <Box mt={2} display="flex" justifyContent="flex-end">
                       <Button
-                        variant={joined.includes(event.eventId) ? "contained" : "outlined"}
+                        startIcon={<VisibilityIcon />}
+                        variant="contained"
                         size="small"
-                        color={joined.includes(event.eventId) ? "error" : "primary"}
-                        onClick={() => handleJoinToggle(event.eventId)}
+                        onClick={() => handleViewDetails(event.eventId)}
                       >
-                        {joined.includes(event.eventId) ? "Leave Event" : "Join"}
-                    </Button>
+                        View More Details
+                      </Button>
                     </Box>
-                  </Box>
+                  </Card>
+                </Grow>
+              ))
+            )}
+          </CardContent>
+          <Snackbar
+            open={snackbar.open}
+            autoHideDuration={3000}
+            onClose={() => setSnackbar({ ...snackbar, open: false })}
+            anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          >
+            <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
+          </Snackbar>
+        </Card>
+      </Grow>
 
-                  <Box mt={2} display="flex" justifyContent="flex-end">
-                    <Button
-                      startIcon={<VisibilityIcon />}
-                      variant="contained"
-                      size="small"
-                      onClick={() => handleViewDetails(event.eventId)}
-                    >
-                      View More Details
-                    </Button>
-                  </Box>
-                </Card>
-              </Grow>
-            ))
-          )}
-        </CardContent>
-        <Snackbar
-          open={snackbar.open}
-          autoHideDuration={3000}
-          onClose={() => setSnackbar({ ...snackbar, open: false })}
-          anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        >
-          <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
-        </Snackbar>
-      </Card>
-    </Grow>
-
-    {loading && <LoadingSpinner/>}
+      {loading && <LoadingSpinner />}
+      <EditEventModal
+        open={openModal}
+        onClose={() => {
+          setOpenModal(false);
+          fetchEvents();
+          setSelectedEvent(null)
+        }}
+        eventData={selectedEvent}
+      />
     </>
   );
 }

@@ -14,7 +14,6 @@ const ContentView = ({ selectedTab, selectedEventId, onSelectEvent, onBack }) =>
       <>
         <Schedule onSelectEvent={onSelectEvent} />
         <MySchedule />
-        <VenueMap />
       </>
     );
   }
