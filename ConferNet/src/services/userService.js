@@ -19,6 +19,16 @@ export const getUserById = async () => {
   return null;
 };
 
+export const getNewUserById = async (userId) => {
+  if (userId) {
+    const response = await fetch(`${API_URL}/users/${userId}`);
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || "User not found");
+    return data;
+  }
+  return null;
+};
+
 export const bookmarkSession = async (userId, sessionId) => {
   const response = await fetch(`${API_URL}/users/${userId}/bookmark/${sessionId}`, {
     method: "POST",

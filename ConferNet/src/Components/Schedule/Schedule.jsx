@@ -24,6 +24,7 @@ import {
   removeBookmarkedEvent,
   getUserId,
   joinEvent,
+  leaveEvent,
   getBookmarkedEvents,
   getRegisteredEvents,
 } from "../../services/userService";
@@ -86,19 +87,32 @@ function Schedule({ onSelectEvent }) {
     }
   };
 
-  const handleJoin = async (eventId) => {
+  const handleJoinToggle = async (eventId) => {
     const userId = await getUserId();
     if (!userId) return;
-
-    try {
-      await joinEvent(userId, eventId);
-      setJoined(prev => [...prev, eventId]);
-      setSnackbar({ open: true, message: "Successfully joined event", severity: "success" });
-    } catch (err) {
-      setSnackbar({ open: true, message: err.message, severity: "error" });
+  
+    if (joined.includes(eventId)) {
+      const confirmLeave = window.confirm("Are you sure you want to leave this event?");
+      if (!confirmLeave) return;
+  
+      try {
+        await leaveEvent(userId, eventId);
+        setJoined((prev) => prev.filter((id) => id !== eventId));
+        setSnackbar({ open: true, message: "You left the event.", severity: "info" });
+      } catch (err) {
+        setSnackbar({ open: true, message: err.message, severity: "error" });
+      }
+    } else {
+      try {
+        await joinEvent(userId, eventId);
+        setJoined((prev) => [...prev, eventId]);
+        setSnackbar({ open: true, message: "Successfully joined the event!", severity: "success" });
+      } catch (err) {
+        setSnackbar({ open: true, message: err.message, severity: "error" });
+      }
     }
   };
-
+  
   const handleViewDetails = (eventId) => {
     onSelectEvent(eventId);
   };
@@ -139,7 +153,6 @@ function Schedule({ onSelectEvent }) {
             </Tooltip>
           </Box>
 
-          {/* Event Cards */}
           {filteredEvents.length === 0 ? (
             <Typography>No events to register</Typography>
           ) : (
@@ -166,13 +179,13 @@ function Schedule({ onSelectEvent }) {
                         </IconButton>
                       </Tooltip>
                       <Button
-                        variant="outlined"
+                        variant={joined.includes(event.eventId) ? "contained" : "outlined"}
                         size="small"
-                        onClick={() => handleJoin(event.eventId)}
-                        disabled={joined.includes(event.eventId)}
+                        color={joined.includes(event.eventId) ? "error" : "primary"}
+                        onClick={() => handleJoinToggle(event.eventId)}
                       >
-                        {joined.includes(event.eventId) ? "Joined" : "Join"}
-                      </Button>
+                        {joined.includes(event.eventId) ? "Leave Event" : "Join"}
+                    </Button>
                     </Box>
                   </Box>
 

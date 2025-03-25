@@ -6,7 +6,7 @@ import {
     Divider
   } from "@mui/material";
   
-  function VenueMap() {
+  function VenueMap({link}) {
     return (
       <Card sx={{ mb: 3 }}>
         <CardContent>

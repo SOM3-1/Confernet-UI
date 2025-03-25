@@ -145,7 +145,7 @@ export const CreateEventModal = ({ open, onClose }) => {
             <Grid item xs={6}><TextField label="City" name="city" fullWidth onChange={handleChange} value={formData.city} /></Grid>
             <Grid item xs={6}><TextField label="Address" name="address" fullWidth onChange={handleChange} value={formData.address} /></Grid>
             <Grid item xs={6}><TextField label="Country" name="country" fullWidth onChange={handleChange} value={formData.country} /></Grid>
-            <Grid item xs={12}><TextField select label="Venue Map URL" name="venueMapUrl" fullWidth value={formData.venueMapUrl} onChange={handleChange}><MenuItem value="" disabled>Select a location</MenuItem>{LOCATION_OPTIONS.map(loc => (<MenuItem key={loc} value={`https://maps.google.com/?q=${encodeURIComponent(loc)}`}>{loc}</MenuItem>))}</TextField></Grid>
+            <Grid item xs={12}><TextField select label="Venue Map URL" name="venueMapUrl" fullWidth value={formData.venueMapUrl} onChange={handleChange} required><MenuItem value="" disabled>Select a location</MenuItem>{LOCATION_OPTIONS.map(loc => (<MenuItem key={loc} value={`https://maps.google.com/?q=${encodeURIComponent(loc)}`}>{loc}</MenuItem>))}</TextField></Grid>
             <Grid item xs={6}><TextField label="Stream URL" name="streamUrl" fullWidth onChange={handleChange} value={formData.streamUrl} /></Grid>
             <Grid item xs={6}><TextField label="Max Attendees" name="maxAttendees" type="number" fullWidth onChange={handleChange} value={formData.maxAttendees} /></Grid>
             <Grid item xs={12}><TextField label="Announcement" name="announcement" fullWidth multiline rows={2} onChange={handleChange} value={formData.announcement} /></Grid>
@@ -172,7 +172,7 @@ export const CreateEventModal = ({ open, onClose }) => {
       case 2:
         return (
           <Grid container spacing={2}>
-            <Grid item xs={6}><TextField label="Registration Fee" name="registrationFee" type="number" fullWidth onChange={handleChange} value={formData.registrationFee} /></Grid>
+            <Grid item xs={6}><TextField label="Registration Fee" name="registrationFee" type="number" fullWidth onChange={handleChange} value={formData.registrationFee} required/></Grid>
             <Grid item xs={6}><TextField label="Currency" name="currency" fullWidth value={formData.currency} onChange={handleChange} /></Grid>
             <Grid item xs={12}><TextField select label="Payment Method" name="paymentMethods" fullWidth value={formData.paymentMethods} onChange={handleChange}><MenuItem value="Cash">Cash</MenuItem><MenuItem value="Stripe">Stripe</MenuItem><MenuItem value="PayPal">PayPal</MenuItem></TextField></Grid>
           </Grid>
