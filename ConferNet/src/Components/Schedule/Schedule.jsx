@@ -141,7 +141,7 @@ function Schedule({ onSelectEvent }) {
       <Grow in timeout={500}>
         <Card sx={{ mb: 3 }}>
           <CardContent>
-            <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+            <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
               <TextField
                 placeholder="Search events..."
                 variant="outlined"
@@ -155,7 +155,7 @@ function Schedule({ onSelectEvent }) {
                     </InputAdornment>
                   ),
                 }}
-                sx={{ width: "70%" }}
+                sx={{ width: "100%" }}
               />
               <Tooltip title="Refresh Events">
                 <IconButton onClick={fetchEvents}>
