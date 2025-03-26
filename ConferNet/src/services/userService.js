@@ -90,7 +90,7 @@ export const getUsersByIds = async (userIds) => {
   }
 
   const response = await fetch(`${API_URL}/users/multiple-users/by-ids`, {
-    method: "POST",
+    method: "POST", 
     headers: {
       "Content-Type": "application/json",
     },
@@ -101,6 +101,7 @@ export const getUsersByIds = async (userIds) => {
   if (!response.ok) throw new Error(data.error || "Failed to fetch users by IDs");
   return data.users;
 };
+
 
 export const joinEvent = async (userId, eventId) => {
   const response = await fetch(`${API_URL}/users/${userId}/join-event/${eventId}`, {

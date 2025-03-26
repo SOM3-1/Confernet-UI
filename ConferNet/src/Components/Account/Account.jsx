@@ -8,11 +8,11 @@ import {
   Divider,
   Grid,
   Tabs,
-  Tab, Button
+  Tab,
+  Button
 } from "@mui/material";
 import {
   Email as EmailIcon,
-  Person as PersonIcon,
   Phone as PhoneIcon,
   Business as BusinessIcon,
   LocationCity as LocationCityIcon,
@@ -20,7 +20,6 @@ import {
   Work as WorkIcon,
   CalendarMonth as CalendarMonthIcon,
 } from "@mui/icons-material";
-
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import {
   getUserById,
@@ -28,8 +27,9 @@ import {
   getBookmarkedEvents,
   getRegisteredEvents,
 } from "../../services/userService";
+import { getAllEvents } from "../../services/eventService";
 import { LoadingSpinner } from "../Loading/LoadingSpinner";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 
 function Account() {
   const [userData, setUserData] = useState(null);
@@ -37,13 +37,16 @@ function Account() {
   const [loading, setLoading] = useState(true);
   const [bookmarked, setBookmarked] = useState([]);
   const [registered, setRegistered] = useState([]);
+  const [organized, setOrganized] = useState([]);
+  const [speaking, setSpeaking] = useState([]);
+
+  const navigate = useNavigate();
 
   const getInitials = (name) => {
     if (!name) return "NA";
     const parts = name.trim().split(" ");
     return parts.slice(0, 2).map(p => p[0].toUpperCase()).join("");
   };
-
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -52,10 +55,22 @@ function Account() {
         const userId = await getUserId();
         const bookmarkedEvents = await getBookmarkedEvents(userId);
         const registeredEvents = await getRegisteredEvents(userId);
+        const allEvents = await getAllEvents();
 
         setUserData(user);
         setBookmarked(bookmarkedEvents);
         setRegistered(registeredEvents);
+
+        // Organizer events
+        const orgEvents = allEvents.filter(e => e.organizerId === userId);
+        setOrganized(orgEvents);
+
+        // Speaker events
+        const spkEvents = allEvents.filter(e =>
+          Array.isArray(e.keynoteSpeakers) && e.keynoteSpeakers.includes(userId)
+        );
+        setSpeaking(spkEvents);
+
       } catch (error) {
         console.error("Error loading account data:", error);
       } finally {
@@ -65,8 +80,16 @@ function Account() {
     fetchUserData();
   }, []);
 
-  if (loading) return <LoadingSpinner/>;
+  if (loading) return <LoadingSpinner />;
   if (!userData) return <Typography sx={{ mt: 4 }} color="error">Could not load user data.</Typography>;
+
+  const tabs = [
+    { label: "Joined Events", data: registered },
+    { label: "Bookmarked Events", data: bookmarked },
+  ];
+
+  if (userData.role === 1) tabs.push({ label: "Events You Organized", data: organized });
+  if (userData.role === 2) tabs.push({ label: "Events You're Speaking At", data: speaking });
 
   return (
     <Box>
@@ -96,13 +119,13 @@ function Account() {
       </Card>
 
       <Tabs value={tabIndex} onChange={(e, newIndex) => setTabIndex(newIndex)} centered>
-        <Tab label="Joined Events" />
-        <Tab label="Bookmarked Events" />
+        {tabs.map((tab, idx) => (
+          <Tab key={idx} label={tab.label} />
+        ))}
       </Tabs>
 
       <Box mt={2}>
-        {tabIndex === 0 && <EventList events={registered} title="Events You've Joined" />}
-        {tabIndex === 1 && <EventList events={bookmarked} title="Bookmarked Events" />}
+        <EventList events={tabs[tabIndex].data} title={tabs[tabIndex].label} />
       </Box>
     </Box>
   );
@@ -119,12 +142,11 @@ const InfoRow = ({ icon, label, value }) => (
   </Grid>
 );
 
-
 function EventList({ events, title }) {
   const navigate = useNavigate();
 
   const handleViewDetails = (eventId) => {
-    navigate(`/home/${eventId}`)
+    navigate(`/home/${eventId}`);
   };
 
   if (!events || !events.length) {
@@ -137,9 +159,7 @@ function EventList({ events, title }) {
       <Grid container spacing={2}>
         {events.map((event) => (
           <Grid item xs={12} md={6} key={event.eventId}>
-            <Card 
-              sx={{ cursor: "pointer", transition: "0.3s", "&:hover": { boxShadow: 6 } }}
-            >
+            <Card sx={{ cursor: "pointer", transition: "0.3s", "&:hover": { boxShadow: 6 } }}>
               <CardContent>
                 <Box display="flex" justifyContent="space-between" alignItems="center">
                   <Box>
@@ -153,15 +173,15 @@ function EventList({ events, title }) {
                     </Typography>
                   </Box>
                   <Box mt={2} display="flex" justifyContent="flex-end">
-                      <Button
-                        startIcon={<VisibilityIcon />}
-                        variant="contained"
-                        size="small"
-                        onClick={() => handleViewDetails(event.eventId)}
-                      >
-                        View More Details
-                      </Button>
-                    </Box>
+                    <Button
+                      startIcon={<VisibilityIcon />}
+                      variant="contained"
+                      size="small"
+                      onClick={() => handleViewDetails(event.eventId)}
+                    >
+                      View More Details
+                    </Button>
+                  </Box>
                 </Box>
               </CardContent>
             </Card>
@@ -171,7 +191,6 @@ function EventList({ events, title }) {
     </>
   );
 }
-
 
 function roleToLabel(role) {
   switch (role) {

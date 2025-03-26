@@ -40,17 +40,24 @@ const EventDetails = ({ eventId, onBack }) => {
   const [bookmarked, setBookmarked] = useState(false);
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
   const [openModal, setOpenModal] = useState(false);
-  const [currentUserId, setCurrentUserId] = useState(null);
   const [isOrganizer, setIsOrganizer] = useState(false);
+  const [isSpeaker, setIsSpeaker] = useState(false);
+
   const navigate = useNavigate();
+  const now = new Date();
+
+  const eventEnded = event?.endDate?._seconds
+  ? new Date(event.endDate._seconds * 1000) < now
+  : false;
 
   const fetchDetails = async () => {
     const data = await getEventById(eventId);
     setEvent(data);
 
     const userId = await getUserId();
-    setCurrentUserId(userId);
     setIsOrganizer(userId === data.organizerId);
+    setIsSpeaker(Array.isArray(data?.keynoteSpeakers) && data.keynoteSpeakers.includes(userId));
+
 
     if (userId) {
       const bookmarkedEvents = await getBookmarkedEvents(userId);
@@ -133,7 +140,7 @@ const EventDetails = ({ eventId, onBack }) => {
             </IconButton>
           </Tooltip>
           {isOrganizer ? (
-            <Button variant="contained" color="secondary" onClick={() => setOpenModal(true)}>
+            <Button variant="contained" color="secondary" onClick={() => setOpenModal(true)} disabled={eventEnded}>
               Edit Event
             </Button>
           ) : (
@@ -141,6 +148,7 @@ const EventDetails = ({ eventId, onBack }) => {
               variant={joined ? "contained" : "outlined"}
               color={joined ? "error" : "primary"}
               onClick={handleJoinToggle}
+              disabled={eventEnded || isSpeaker}
             >
               {joined ? "Leave Event" : "Join Event"}
             </Button>
