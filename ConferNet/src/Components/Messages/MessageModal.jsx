@@ -52,7 +52,14 @@ const ChatPopup = ({ open, onClose, senderId, receiverId, receiverName }) => {
       console.error("Send failed:", err);
     }
   };
-
+  const formatTimestamp = (timestamp) => {
+    if (!timestamp?._seconds) return "";
+    return new Date(timestamp._seconds * 1000).toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+  
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
       <DialogTitle>
@@ -83,8 +90,8 @@ const ChatPopup = ({ open, onClose, senderId, receiverId, receiverName }) => {
               >
                 <Typography>{msg.message}</Typography>
                 <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5, display: 'block', textAlign: 'right' }}>
-                  {new Date(msg.timestamp.seconds * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                </Typography>
+  {formatTimestamp(msg.timestamp)}
+</Typography>
               </Paper>
             </ListItem>
           ))}
