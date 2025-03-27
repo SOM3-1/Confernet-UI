@@ -32,6 +32,7 @@ import { LoadingSpinner } from "../Loading/LoadingSpinner";
 import { EditEventModal } from "../Event/EditEventModal";
 import { CreateEventButton } from "../Event/CreateEventButton";
 import { useNavigate } from "react-router-dom";
+import PaymentModal from "../Payment/PaymentModal";
 
 function Schedule({ onSelectEvent }) {
   const [events, setEvents] = useState([]);
@@ -43,10 +44,12 @@ function Schedule({ onSelectEvent }) {
   const [ownedEvents, setOwnedEvents] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
-  const navigate  = useNavigate()
+  const [paymentEvent, setPaymentEvent] = useState(null);
+  const [paymentOpen, setPaymentOpen] = useState(false);
+  const navigate = useNavigate();
 
   const fetchEvents = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
       const userId = await getUserId();
       const upcoming = await getUpcomingEvents();
@@ -58,9 +61,8 @@ function Schedule({ onSelectEvent }) {
       await fetchUserPreferences();
     } catch (err) {
       console.error(err);
-    }
-    finally {
-      setLoading(false)
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -98,34 +100,45 @@ function Schedule({ onSelectEvent }) {
     }
   };
 
-  const handleJoinToggle = async (eventId) => {
+  const handleJoinToggle = async (event) => {
     const userId = await getUserId();
     if (!userId) return;
 
-    if (joined.includes(eventId)) {
+    if (joined.includes(event.eventId)) {
       const confirmLeave = window.confirm("Are you sure you want to leave this event?");
       if (!confirmLeave) return;
 
       try {
-        await leaveEvent(userId, eventId);
-        setJoined((prev) => prev.filter((id) => id !== eventId));
+        await leaveEvent(userId, event.eventId);
+        setJoined((prev) => prev.filter((id) => id !== event.eventId));
         setSnackbar({ open: true, message: "You left the event.", severity: "info" });
       } catch (err) {
         setSnackbar({ open: true, message: err.message, severity: "error" });
       }
     } else {
-      try {
-        await joinEvent(userId, eventId);
-        setJoined((prev) => [...prev, eventId]);
-        setSnackbar({ open: true, message: "Successfully joined the event!", severity: "success" });
-      } catch (err) {
-        setSnackbar({ open: true, message: err.message, severity: "error" });
-      }
+      setPaymentEvent(event);
+      setPaymentOpen(true);
+    }
+  };
+
+  const handlePayment = async (method) => {
+    const userId = await getUserId();
+    if (!userId || !paymentEvent) return;
+
+    try {
+      await joinEvent(userId, paymentEvent.eventId);
+      setJoined((prev) => [...prev, paymentEvent.eventId]);
+      setSnackbar({ open: true, message: "Successfully joined the event!", severity: "success" });
+    } catch (err) {
+      setSnackbar({ open: true, message: err.message, severity: "error" });
+    } finally {
+      setPaymentOpen(false);
+      setPaymentEvent(null);
     }
   };
 
   const handleViewDetails = (eventId) => {
-    navigate(`/home/${eventId}`)
+    navigate(`/home/${eventId}`);
   };
 
   useEffect(() => {
@@ -192,8 +205,10 @@ function Schedule({ onSelectEvent }) {
                           <Button
                             variant="contained"
                             color="secondary"
-                            onClick={() =>  {setSelectedEvent(event);
-                              setOpenModal(true);}}
+                            onClick={() => {
+                              setSelectedEvent(event);
+                              setOpenModal(true);
+                            }}
                           >
                             Edit Event
                           </Button>
@@ -202,12 +217,11 @@ function Schedule({ onSelectEvent }) {
                             variant={joined.includes(event.eventId) ? "contained" : "outlined"}
                             size="small"
                             color={joined.includes(event.eventId) ? "error" : "primary"}
-                            onClick={() => handleJoinToggle(event.eventId)}
+                            onClick={() => handleJoinToggle(event)}
                           >
                             {joined.includes(event.eventId) ? "Leave Event" : "Join"}
                           </Button>
                         )}
-
                       </Box>
                     </Box>
 
@@ -243,11 +257,17 @@ function Schedule({ onSelectEvent }) {
         onClose={() => {
           setOpenModal(false);
           fetchEvents();
-          setSelectedEvent(null)
+          setSelectedEvent(null);
         }}
         eventData={selectedEvent}
       />
-       <CreateEventButton handleClose={fetchEvents}/>
+      <CreateEventButton handleClose={fetchEvents} />
+      <PaymentModal
+        open={paymentOpen}
+        onClose={() => setPaymentOpen(false)}
+        event={paymentEvent}
+        onPay={handlePayment}
+      />
     </>
   );
 }

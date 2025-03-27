@@ -31,6 +31,7 @@ import { EditEventModal } from "./EditEventModal";
 import EventSpeakers from "./EventSpeakers";
 import EventAttendees from "./EventAttendees";
 import { useNavigate } from "react-router-dom";
+import PaymentModal from "../Payment/PaymentModal";
 
 const EventDetails = ({ eventId, onBack }) => {
   const [event, setEvent] = useState(null);
@@ -42,13 +43,14 @@ const EventDetails = ({ eventId, onBack }) => {
   const [openModal, setOpenModal] = useState(false);
   const [isOrganizer, setIsOrganizer] = useState(false);
   const [isSpeaker, setIsSpeaker] = useState(false);
+  const [paymentOpen, setPaymentOpen] = useState(false);
 
   const navigate = useNavigate();
   const now = new Date();
 
   const eventEnded = event?.endDate?._seconds
-  ? new Date(event.endDate._seconds * 1000) < now
-  : false;
+    ? new Date(event.endDate._seconds * 1000) < now
+    : false;
 
   const fetchDetails = async () => {
     const data = await getEventById(eventId);
@@ -57,7 +59,6 @@ const EventDetails = ({ eventId, onBack }) => {
     const userId = await getUserId();
     setIsOrganizer(userId === data.organizerId);
     setIsSpeaker(Array.isArray(data?.keynoteSpeakers) && data.keynoteSpeakers.includes(userId));
-
 
     if (userId) {
       const bookmarkedEvents = await getBookmarkedEvents(userId);
@@ -80,16 +81,25 @@ const EventDetails = ({ eventId, onBack }) => {
   const handleJoinToggle = async () => {
     const userId = await getUserId();
     if (!userId) return;
+
     if (joined) {
       if (!window.confirm("Are you sure you want to leave this event?")) return;
       await leaveEvent(userId, eventId);
       setJoined(false);
       setSnackbar({ open: true, message: "You left the event.", severity: "info" });
     } else {
-      await joinEvent(userId, eventId);
-      setJoined(true);
-      setSnackbar({ open: true, message: "Successfully joined the event!", severity: "success" });
+      setPaymentOpen(true); // open payment modal
     }
+  };
+
+  const handlePayment = async (method) => {
+    const userId = await getUserId();
+    if (!userId) return;
+
+    await joinEvent(userId, eventId);
+    setJoined(true);
+    setSnackbar({ open: true, message: "Successfully joined the event!", severity: "success" });
+    setPaymentOpen(false);
   };
 
   const handleBookmarkToggle = async () => {
@@ -129,7 +139,7 @@ const EventDetails = ({ eventId, onBack }) => {
 
   return (
     <Box>
-       <Button onClick={handleBack} variant="outlined" sx={{ mb: 2 }}>← Back</Button>
+      <Button onClick={handleBack} variant="outlined" sx={{ mb: 2 }}>← Back</Button>
 
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Typography variant="h4">{event.name}</Typography>
@@ -190,10 +200,10 @@ const EventDetails = ({ eventId, onBack }) => {
           </Card>
         )}
 
-          {tabIndex === 1 && <EventSpeakers speakers={event.keynoteSpeakers} eventId={event.eventId} />}
+        {tabIndex === 1 && <EventSpeakers speakers={event.keynoteSpeakers} eventId={event.eventId} />}
 
         {tabIndex === 2 && (
-         <EventAttendees eventId={event.eventId}/>
+          <EventAttendees eventId={event.eventId} />
         )}
 
         {tabIndex === 3 && (
@@ -220,6 +230,13 @@ const EventDetails = ({ eventId, onBack }) => {
           fetchDetails();
         }}
         eventData={event}
+      />
+
+      <PaymentModal
+        open={paymentOpen}
+        onClose={() => setPaymentOpen(false)}
+        event={event}
+        onPay={handlePayment}
       />
     </Box>
   );
