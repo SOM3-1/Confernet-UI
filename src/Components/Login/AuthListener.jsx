@@ -1,3 +1,10 @@
+/**
+ * The `AuthListener` component in JavaScript React listens for authentication state changes and
+ * redirects users based on their authentication status and current location.
+ * @returns The `AuthListener` component returns either a `LoadingSpinner` component if the
+ * authentication status is not checked yet, or an `Outlet` component which renders the child routes
+ * defined in the parent route component.
+ */
 import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { Navigate, Outlet, useLocation, useNavigate } from "react-router-dom";

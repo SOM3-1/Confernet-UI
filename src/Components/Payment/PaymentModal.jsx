@@ -1,3 +1,5 @@
+/* This code snippet is a React component called `PaymentModal` that represents a modal dialog for
+completing a payment. Here's a breakdown of what the code is doing: */
 import React, { useState } from "react";
 import {
   Dialog,

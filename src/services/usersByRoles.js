@@ -1,5 +1,12 @@
 import {API_URL} from "./../constants/api"
 
+/**
+ * This function fetches users based on their role ID from an API endpoint and returns the user data.
+ * @param roleId - The `roleId` parameter is used to specify the role ID for which you want to retrieve
+ * users. It should be a number that corresponds to the specific role you are interested in.
+ * @returns The function `getUsersByRoleId` returns the list of users with the specified role ID
+ * fetched from the API endpoint `/users-by-roleid/role/`.
+ */
 export const getUsersByRoleId = async (roleId) => {
     if (typeof roleId !== "number") {
       throw new Error("roleId must be a number");
@@ -16,6 +23,10 @@ export const getUsersByRoleId = async (roleId) => {
   };
   
 
+/**
+ * The function `loadKeynoteSpeakers` asynchronously loads and logs the keynote speakers by their role
+ * ID.
+ */
 export const loadKeynoteSpeakers = async () => {
   try {
     const keynoteRoleId = 2;

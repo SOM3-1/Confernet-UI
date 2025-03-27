@@ -1,3 +1,5 @@
+/* This code snippet is a React component named `App` that sets up the routing for a web application
+using React Router. Here's a breakdown of what the code is doing: */
 import { Routes, Route } from "react-router-dom";
 import Signup from "./Components/Login/Signup";
 import Login from "./Components/Login/Login";

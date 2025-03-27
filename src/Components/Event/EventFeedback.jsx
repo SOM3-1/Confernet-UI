@@ -1,3 +1,5 @@
+/* This code snippet is a React component called `EventFeedback` that handles feedback and comments for
+a specific event. Here's a breakdown of what the code does: */
 import { useEffect, useState } from "react";
 import {
     Box, Typography, TextField, Button, Divider

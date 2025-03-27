@@ -1,3 +1,5 @@
+/* This code snippet is a React component named `People` that represents a networking feature. Here's a
+breakdown of what the component does: */
 import { useState, useEffect } from "react";
 import {
   Card,

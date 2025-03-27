@@ -1,3 +1,5 @@
+/* The above code is a React component called `Message` that handles messaging functionality. Here is a
+summary of what the code is doing: */
 import { useState, useEffect } from "react";
 import {
   Card,

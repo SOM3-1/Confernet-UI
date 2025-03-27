@@ -1,3 +1,5 @@
+/* This code snippet is a React component called `Header` that represents a header bar for a dashboard
+application. Here's a breakdown of what the code is doing: */
 import { AppBar, Toolbar, IconButton, Typography, Button } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 

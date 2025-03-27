@@ -1,3 +1,5 @@
+/* The above code is a React component called `EventDetails` that displays detailed information about a
+specific event. Here is a summary of what the code does: */
 import { useState, useEffect } from "react";
 import { getEventById } from "../../services/eventService";
 import {

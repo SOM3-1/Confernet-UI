@@ -1,3 +1,11 @@
+/**
+ * The CreateEventButton component in a React application displays a button to create an event if the
+ * user is an organizer.
+ * @returns The `CreateEventButton` component is being returned. It renders a button that allows
+ * organizers to create events. The button is displayed at the bottom right corner of the screen. If
+ * the user is not an organizer, the component returns `null`. The button opens a modal when clicked,
+ * allowing the user to create an event.
+ */
 import React, { useEffect, useState } from 'react';
 import { Box, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';

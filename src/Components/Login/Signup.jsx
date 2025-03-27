@@ -1,3 +1,12 @@
+/**
+ * The `Signup` function in this code snippet handles user registration by capturing user input,
+ * creating a new account with Firebase authentication, and storing user details in a database.
+ * @returns The `Signup` component is being returned. It contains a form for user signup with fields
+ * for name, email, password, role, date of birth, phone number, organization, job title, country,
+ * city, and bio. Upon submission, it handles the signup process by creating a new user account using
+ * Firebase authentication, storing user details in localStorage, and redirecting to the home page upon
+ * successful signup
+ */
 import { useState } from "react";
 import { auth } from "../../firebase/firebaseConfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";

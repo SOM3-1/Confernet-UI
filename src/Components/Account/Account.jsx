@@ -1,3 +1,5 @@
+/* The above code is a React component named `Account` that displays user account information and lists
+events based on the user's role. Here is a summary of what the code does: */
 import { useEffect, useState } from "react";
 import {
   Typography,

@@ -1,3 +1,5 @@
+/* This code snippet is a React component named `Home` that represents a dashboard or home page of a
+web application. Here's a breakdown of what the code is doing: */
 import React, { useEffect, useState } from "react";
 import { CssBaseline, Box, Container } from "@mui/material";
 import { signOut } from "firebase/auth";

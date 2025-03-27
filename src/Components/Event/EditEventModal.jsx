@@ -1,3 +1,5 @@
+/* The above code is a React component called `EditEventModal`. It is a modal dialog that allows users
+to edit event details. Here is a summary of what the code does: */
 import React, { useEffect, useState } from 'react';
 import {
   Dialog, DialogTitle, DialogContent,

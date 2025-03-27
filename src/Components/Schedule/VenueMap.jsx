@@ -1,3 +1,6 @@
+/* The code snippet provided is a React component named `VenueMap` that displays a card containing a
+Google Maps embedded iframe showing the location of a conference venue. Here's a breakdown of what
+the code is doing: */
 import {
     Typography,
     Card,

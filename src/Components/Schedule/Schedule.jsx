@@ -1,3 +1,5 @@
+/* The above code is a React component named `Schedule` that displays a list of events. Here is a
+summary of what the code does: */
 import { useEffect, useState } from "react";
 import {
   Card,

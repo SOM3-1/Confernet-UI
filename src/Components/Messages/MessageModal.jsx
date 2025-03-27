@@ -1,3 +1,5 @@
+/* The provided code is a React component called `ChatPopup`. It is a chat interface that allows users
+to send and receive messages in a dialog popup. Here is a breakdown of what the code is doing: */
 
 import { useEffect, useState } from "react";
 import {

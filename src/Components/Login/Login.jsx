@@ -1,3 +1,5 @@
+/* This code snippet is a React component named `Login` that represents a login form for a web
+application. Here's a breakdown of what the code is doing: */
 import { useState } from "react";
 import { auth } from "../../firebase/firebaseConfig";
 import { signInWithEmailAndPassword } from "firebase/auth";

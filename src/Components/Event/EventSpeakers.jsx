@@ -1,3 +1,5 @@
+/* This code snippet is a React component called `EventSpeakers` that displays information about
+keynote speakers for an event. Here's a breakdown of what the code is doing: */
 import { useEffect, useState } from "react";
 import {
   Card, CardContent, Typography, Avatar, Grid, Button, Box,

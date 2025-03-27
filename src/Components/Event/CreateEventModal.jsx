@@ -1,3 +1,5 @@
+/* The above code is a React component called `CreateEventModal` that serves as a form for creating a
+new event. Here is a breakdown of its functionality: */
 import React, { useEffect, useState } from 'react';
 import {
   Dialog, DialogTitle, DialogContent, Stepper, Step, StepLabel,

@@ -1,3 +1,6 @@
+/* This code snippet is a React component called `Sidebar` that represents a sidebar navigation menu.
+It uses Material-UI components like `Drawer`, `Toolbar`, `Divider`, `List`, `ListItem`,
+`ListItemIcon`, and `ListItemText` for the layout and styling of the sidebar. */
 import {
   Drawer,
   Toolbar,

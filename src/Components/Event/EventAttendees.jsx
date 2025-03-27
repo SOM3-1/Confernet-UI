@@ -1,3 +1,4 @@
+/* This code snippet is a React component called `EventAttendees`. Here's a breakdown of what it does: */
 import { useEffect, useState } from "react";
 import {
   Typography,
