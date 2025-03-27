@@ -104,6 +104,7 @@ function Signup() {
           <TextField
             fullWidth
             margin="normal"
+            size="small"
             label="Full Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -114,6 +115,7 @@ function Signup() {
             margin="normal"
             label="Email"
             value={email}
+            size="small"
             onChange={(e) => setEmail(e.target.value)}
             required
           />
@@ -123,6 +125,7 @@ function Signup() {
             label="Password"
             type="password"
             value={password}
+            size="small"
             onChange={(e) => setPassword(e.target.value)}
             required
           />
@@ -133,6 +136,7 @@ function Signup() {
             margin="normal"
             label="Role"
             value={role}
+            size="small"
             onChange={(e) => setRole(e.target.value)}
           >
             <MenuItem value="attendee">Attendee</MenuItem>
@@ -145,6 +149,7 @@ function Signup() {
             label="Date of Birth"
             type="date"
             value={dob}
+            size="small"
             onChange={(e) => setDob(e.target.value)}
             InputLabelProps={{ shrink: true }}
             required
@@ -155,6 +160,7 @@ function Signup() {
             margin="normal"
             label="Phone Number"
             value={phoneNumber}
+            size="small"
             onChange={(e) => setPhoneNumber(e.target.value)}
           />
           <TextField
@@ -162,6 +168,7 @@ function Signup() {
             margin="normal"
             label="Organization"
             value={organization}
+            size="small"
             onChange={(e) => setOrganization(e.target.value)}
           />
           <TextField
@@ -169,6 +176,7 @@ function Signup() {
             margin="normal"
             label="Job Title"
             value={jobTitle}
+            size="small"
             onChange={(e) => setJobTitle(e.target.value)}
           />
           <TextField
@@ -176,6 +184,7 @@ function Signup() {
             margin="normal"
             label="Country"
             value={country}
+            size="small"
             onChange={(e) => setCountry(e.target.value)}
           />
           <TextField
@@ -183,6 +192,7 @@ function Signup() {
             margin="normal"
             label="City"
             value={city}
+            size="small"
             onChange={(e) => setCity(e.target.value)}
           />
           <TextField
@@ -192,6 +202,7 @@ function Signup() {
             margin="normal"
             label="Bio"
             value={bio}
+            size="small"
             onChange={(e) => setBio(e.target.value)}
           />
 
