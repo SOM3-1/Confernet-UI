@@ -32,6 +32,7 @@ import EventSpeakers from "./EventSpeakers";
 import EventAttendees from "./EventAttendees";
 import { useNavigate } from "react-router-dom";
 import PaymentModal from "../Payment/PaymentModal";
+import EventFeedback from "./EventFeedback";
 
 const EventDetails = ({ eventId, onBack }) => {
   const [event, setEvent] = useState(null);
@@ -88,7 +89,7 @@ const EventDetails = ({ eventId, onBack }) => {
       setJoined(false);
       setSnackbar({ open: true, message: "You left the event.", severity: "info" });
     } else {
-      setPaymentOpen(true); // open payment modal
+      setPaymentOpen(true); 
     }
   };
 
@@ -174,8 +175,8 @@ const EventDetails = ({ eventId, onBack }) => {
       <Tabs value={tabIndex} onChange={(e, newValue) => setTabIndex(newValue)} sx={{ mt: 3 }} textColor="primary" indicatorColor="primary">
         <Tab label="Details" />
         <Tab label="Speakers" />
+        <Tab label="Feedback" />
         {isOrganizer && <Tab label="Attendees" />}
-        <Tab label="Support" />
       </Tabs>
 
       <Box mt={3}>
@@ -203,14 +204,15 @@ const EventDetails = ({ eventId, onBack }) => {
         {tabIndex === 1 && <EventSpeakers speakers={event.keynoteSpeakers} eventId={event.eventId} />}
 
         {tabIndex === 2 && (
-          <EventAttendees eventId={event.eventId} />
+          <Card>
+          <CardContent>
+            <EventFeedback eventId={event.eventId} />
+          </CardContent>
+        </Card>
         )}
 
-        {tabIndex === 3 && (
-          <Card><CardContent>
-            <Typography variant="h6">Need Help?</Typography>
-            <Typography variant="body2">Please contact <strong>{event.contactEmail}</strong> for assistance.</Typography>
-          </CardContent></Card>
+         {tabIndex === 3 && (
+          <EventAttendees eventId={event.eventId} />
         )}
       </Box>
 

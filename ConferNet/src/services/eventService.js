@@ -1,29 +1,5 @@
 import {API_URL} from "./../constants/api"
 
-const oldSampleEvent = {
-    name: "TechConf 2025",
-    description: "An event for tech enthusiasts",
-    startDate: "2025-06-01",
-    endDate: "2025-06-03",
-    timezone: "America/New_York",
-    venue: "Tech Expo Hall",
-    address: "123 Main St",
-    city: "San Francisco",
-    country: "USA",
-    venueMapUrl: "https://example.com/venue-map.png",
-    organizerId: "user123",
-    organizerName: "Jane Doe",
-    contactEmail: "organizer@example.com",
-    contactPhone: "+1-555-123-4567",
-    keynoteSpeakers: ["user456", "user789"],
-    sessions: [], 
-    registrationRequired: true,
-    registrationFee: 99,
-    currency: "USD",
-    paymentMethods: "Credit Card, PayPal, Stripe",
-    maxAttendees: 300
-  };
-
 export const createEvent = async (eventData) => {
   const response = await fetch(`${API_URL}/events`, {
     method: "POST",
@@ -80,8 +56,46 @@ export const deleteEvent = async (eventId) => {
 };
 
 export const getEventAttendees = async (eventId) => {
-  const response = await fetch(`${API_URL}/events/${eventId}/attendees`);
+  const response = await fetch(`${API_URL}/events/events/${eventId}/attendees`);
   const data = await response.json();
   if (!response.ok) throw new Error(data.error || "Failed to fetch attendees");
   return data.userIds;
+};
+
+export const postComment = async (eventId, userId, comment) => {
+  const response = await fetch(`${API_URL}/events/${eventId}/comments`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ userId, comment }),
+  });
+
+  const data = await response.json();
+  if (!response.ok) throw new Error(data.error || "Failed to post comment");
+  return data;
+};
+
+export const getComments = async (eventId) => {
+  const response = await fetch(`${API_URL}/events/${eventId}/comments`);
+  const data = await response.json();
+  if (!response.ok) throw new Error(data.error || "Failed to fetch comments");
+  return data.comments;
+};
+
+export const postRating = async (eventId, userId, rating) => {
+  const response = await fetch(`${API_URL}/events/${eventId}/ratings`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ userId, rating }),
+  });
+
+  const data = await response.json();
+  if (!response.ok) throw new Error(data.error || "Failed to submit rating");
+  return data;
+};
+
+export const getRatingSummary = async (eventId) => {
+  const response = await fetch(`${API_URL}/events/${eventId}/ratings`);
+  const data = await response.json();
+  if (!response.ok) throw new Error(data.error || "Failed to fetch ratings");
+  return data; 
 };

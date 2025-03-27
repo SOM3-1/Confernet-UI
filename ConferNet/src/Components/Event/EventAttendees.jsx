@@ -22,6 +22,7 @@ const EventAttendees = ({ eventId }) => {
         const userIds = await getEventAttendees(eventId);
         if (userIds.length > 0) {
           const users = await getUsersByIds(userIds);
+          console.log(users)
           setAttendees(users);
         } else {
           setAttendees([]);
