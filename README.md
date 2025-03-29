@@ -110,5 +110,43 @@ After signup or login, users are redirected to the **Home** screen where they se
 
 ---
 
+## Tests & Coverage
+
+This project uses **[Vitest](https://vitest.dev/)** for unit testing and coverage reporting.
+
+### Run All Tests
+```bash
+npm run test
+```
+
+Runs all tests once using Vitest.
+
+---
+
+### Watch Mode
+```bash
+npm run test:watch
+```
+
+Continuously watches for file changes and re-runs affected tests for a fast feedback loop during development.
+
+---
+
+### Generate Coverage Report
+```bash
+npm run test:coverage
+```
+
+Generates a full test coverage report in the `coverage/` directory.
+
+- Open `coverage/index.html` in your browser to explore file-by-file breakdowns.
+- Terminal output shows summary of:
+  - Statements
+  - Branches
+  - Functions
+  - Lines
+---
+
+> If you’d like to integrate this with CI/CD or Codecov/GitHub Actions, let me know and I’ll generate a config for that too!
 For any issues, please raise an issue on the GitHub repository.
 
