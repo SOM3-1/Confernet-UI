@@ -23,7 +23,7 @@ describe("registerUser", () => {
     profilePicture: "http://example.com/john.jpg",
   };
 
-  it("successfully registers user", async () => {
+  it("test-id: 55,successfully registers user", async () => {
     fetch.mockResolvedValueOnce({
       ok: true,
       json: async () => ({ success: true, id: "user123" }),
@@ -47,7 +47,7 @@ describe("registerUser", () => {
     expect(data).toEqual({ success: true, id: "user123" });
   });
 
-  it("throws error if registration fails", async () => {
+  it("test-id: 56,throws error if registration fails", async () => {
     fetch.mockResolvedValueOnce({
       ok: false,
       json: async () => ({ message: "Email already exists" }),

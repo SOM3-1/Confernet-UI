@@ -28,7 +28,7 @@ import {
   });
   
   describe("User Services", () => {
-    it("getAllUsers - success", async () => {
+    it("test-id: 67,getAllUsers - success", async () => {
       fetch.mockResolvedValueOnce({
         ok: true,
         json: async () => ({ users: ["user1", "user2"] }),
@@ -37,7 +37,7 @@ import {
       expect(result).toEqual({ users: ["user1", "user2"] });
     });
   
-    it("getUserById - success", async () => {
+    it("test-id: 68, getUserById - success", async () => {
         const mockUser = { uid: "abc123" };
         const { auth } = await import("./../../src/firebase/firebaseConfig");
         auth.currentUser = mockUser;
@@ -52,7 +52,7 @@ import {
       });
       
   
-    it("getNewUserById - success", async () => {
+    it("test-id: 69,getNewUserById - success", async () => {
       fetch.mockResolvedValueOnce({
         ok: true,
         json: async () => ({ name: "Another User" }),
@@ -61,7 +61,7 @@ import {
       expect(result).toEqual({ name: "Another User" });
     });
   
-    it("bookmarkSession - success", async () => {
+    it("test-id: 70,bookmarkSession - success", async () => {
       fetch.mockResolvedValueOnce({
         ok: true,
         json: async () => ({ bookmarked: true }),
@@ -70,7 +70,7 @@ import {
       expect(result).toEqual({ bookmarked: true });
     });
   
-    it("removeBookmarkedSession - success", async () => {
+    it("test-id: 71,removeBookmarkedSession - success", async () => {
       fetch.mockResolvedValueOnce({
         ok: true,
         json: async () => ({ removed: true }),
@@ -79,7 +79,7 @@ import {
       expect(result).toEqual({ removed: true });
     });
   
-    it("getBookmarkedSessions - success", async () => {
+    it("test-id: 72,getBookmarkedSessions - success", async () => {
       fetch.mockResolvedValueOnce({
         ok: true,
         json: async () => ({ sessions: ["session1"] }),
@@ -88,7 +88,7 @@ import {
       expect(result).toEqual(["session1"]);
     });
   
-    it("bookmarkEvent - success", async () => {
+    it("test-id: 73,bookmarkEvent - success", async () => {
       fetch.mockResolvedValueOnce({
         ok: true,
         json: async () => ({ bookmarked: true }),
@@ -97,7 +97,7 @@ import {
       expect(result).toEqual({ bookmarked: true });
     });
   
-    it("removeBookmarkedEvent - success", async () => {
+    it("test-id: 74,removeBookmarkedEvent - success", async () => {
       fetch.mockResolvedValueOnce({
         ok: true,
         json: async () => ({ removed: true }),
@@ -106,7 +106,7 @@ import {
       expect(result).toEqual({ removed: true });
     });
   
-    it("getBookmarkedEvents - success", async () => {
+    it("test-id: 75,getBookmarkedEvents - success", async () => {
       fetch.mockResolvedValueOnce({
         ok: true,
         json: async () => ({ events: ["event1", "event2"] }),
@@ -115,12 +115,12 @@ import {
       expect(result).toEqual(["event1", "event2"]);
     });
   
-    it("getUserId - should return mock UID", async () => {
+    it("test-id: 76,getUserId - should return mock UID", async () => {
       const uid = await getUserId();
       expect(uid).toBe("abc123");
     });
   
-    it("getUsersByIds - success", async () => {
+    it("test-id: 77,getUsersByIds - success", async () => {
       fetch.mockResolvedValueOnce({
         ok: true,
         json: async () => ({ users: ["u1", "u2"] }),
@@ -129,7 +129,7 @@ import {
       expect(result).toEqual(["u1", "u2"]);
     });
   
-    it("joinEvent - success", async () => {
+    it("test-id: 78,joinEvent - success", async () => {
       fetch.mockResolvedValueOnce({
         ok: true,
         json: async () => ({ joined: true }),
@@ -138,7 +138,7 @@ import {
       expect(result).toEqual({ joined: true });
     });
   
-    it("leaveEvent - success", async () => {
+    it("test-id: 79,leaveEvent - success", async () => {
       fetch.mockResolvedValueOnce({
         ok: true,
         json: async () => ({ left: true }),
@@ -147,7 +147,7 @@ import {
       expect(result).toEqual({ left: true });
     });
   
-    it("getRegisteredEvents - success", async () => {
+    it("test-id: 80,getRegisteredEvents - success", async () => {
       fetch.mockResolvedValueOnce({
         ok: true,
         json: async () => ({ events: ["e1", "e2"] }),

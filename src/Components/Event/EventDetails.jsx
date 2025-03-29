@@ -28,7 +28,7 @@ import {
   getRegisteredEvents,
   getUserById
 } from "../../services/userService";
-import VenueMap from "../Schedule/VenueMap";
+import {VenueMap} from "../Schedule/VenueMap";
 import { EditEventModal } from "./EditEventModal";
 import EventSpeakers from "./EventSpeakers";
 import EventAttendees from "./EventAttendees";

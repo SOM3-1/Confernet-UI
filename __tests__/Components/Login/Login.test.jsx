@@ -4,12 +4,10 @@ import { MemoryRouter } from "react-router-dom";
 import Login from "../../../src/Components/Login/Login";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
-// Mock firebase auth
 vi.mock("firebase/auth", () => ({
   signInWithEmailAndPassword: vi.fn(),
 }));
 
-// Mock firebaseConfig (auth)
 vi.mock("../../../src/firebase/firebaseConfig", () => ({
   auth: {},
 }));
@@ -20,7 +18,7 @@ describe("Login Component", () => {
     localStorage.clear();
   });
 
-  it("renders login form inputs and button", () => {
+  it("test-id: 10,renders login form inputs and button", () => {
     render(<Login />, { wrapper: MemoryRouter });
 
     expect(screen.getByLabelText(/Email/i)).toBeInTheDocument();
@@ -29,7 +27,7 @@ describe("Login Component", () => {
     expect(screen.getByText(/Don't have an account/i)).toBeInTheDocument();
   });
 
-  it("shows success snackbar on successful login", async () => {
+  it("test-id: 11, shows success snackbar on successful login", async () => {
     signInWithEmailAndPassword.mockResolvedValue({
       user: { uid: "mock-user-id" },
     });
@@ -57,7 +55,7 @@ describe("Login Component", () => {
     expect(screen.getByText(/Login successful/i)).toBeInTheDocument();
   });
 
-  it("shows error snackbar on login failure", async () => {
+  it("test-id: 12, shows error snackbar on login failure", async () => {
     signInWithEmailAndPassword.mockRejectedValue(new Error("Login failed"));
 
     render(<Login />, { wrapper: MemoryRouter });
@@ -76,7 +74,7 @@ describe("Login Component", () => {
     });
   });
 
-  it("displays loading spinner during login", async () => {
+  it("test-id: 13, displays loading spinner during login", async () => {
     let resolveLogin;
     signInWithEmailAndPassword.mockImplementation(
       () =>
@@ -96,7 +94,6 @@ describe("Login Component", () => {
 
     fireEvent.click(screen.getByRole("button", { name: /Login/i }));
 
-    // Spinner should show immediately
     expect(screen.getByRole("progressbar")).toBeInTheDocument();
 
     resolveLogin({ user: { uid: "123" } });

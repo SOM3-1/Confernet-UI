@@ -63,12 +63,13 @@ const ChatPopup = ({ open, onClose, senderId, receiverId, receiverName }) => {
   };
   
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
+    <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm" data-testid="chat-popup">
       <DialogTitle>
         Chat with {receiverName}
         <IconButton
           onClick={onClose}
           sx={{ position: "absolute", right: 8, top: 8 }}
+          aria-label="close"
         >
           <CloseIcon />
         </IconButton>
@@ -109,7 +110,7 @@ const ChatPopup = ({ open, onClose, senderId, receiverId, receiverName }) => {
             fullWidth
             onKeyDown={(e) => e.key === "Enter" && handleSend()}
           />
-          <IconButton color="primary" onClick={handleSend}>
+          <IconButton color="primary" onClick={handleSend} aria-label="send">
             <SendIcon />
           </IconButton>
         </Box>

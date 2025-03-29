@@ -16,7 +16,7 @@ import {
     const mockEventId = "event123";
     const mockUserId = "speaker1";
   
-    it("uploadSpeakerFile - success", async () => {
+    it("test-id: 57,uploadSpeakerFile - success", async () => {
       const file = new File(["dummy"], "test.pdf", { type: "application/pdf" });
   
       fetch.mockResolvedValueOnce({
@@ -28,7 +28,7 @@ import {
       expect(result).toEqual({ success: true, fileName: "test.pdf" });
     });
   
-    it("uploadSpeakerFile - failure", async () => {
+    it("test-id: 58,uploadSpeakerFile - failure", async () => {
       fetch.mockResolvedValueOnce({
         ok: false,
         json: async () => ({ error: "Invalid file" }),
@@ -39,7 +39,7 @@ import {
       await expect(uploadSpeakerFile(mockEventId, mockUserId, file)).rejects.toThrow("Invalid file");
     });
   
-    it("deleteSpeakerFile - success", async () => {
+    it("test-id: 59,deleteSpeakerFile - success", async () => {
       fetch.mockResolvedValueOnce({
         ok: true,
         json: async () => ({ deleted: true }),
@@ -49,7 +49,7 @@ import {
       expect(result).toEqual({ deleted: true });
     });
   
-    it("deleteSpeakerFile - failure", async () => {
+    it("test-id: 60,deleteSpeakerFile - failure", async () => {
       fetch.mockResolvedValueOnce({
         ok: false,
         json: async () => ({ error: "File not found" }),
@@ -58,7 +58,7 @@ import {
       await expect(deleteSpeakerFile(mockEventId, mockUserId, "invalid.pdf")).rejects.toThrow("File not found");
     });
   
-    it("getUploadedFiles - success", async () => {
+    it("test-id: 61,getUploadedFiles - success", async () => {
       fetch.mockResolvedValueOnce({
         ok: true,
         json: async () => ({
@@ -80,7 +80,7 @@ import {
       });
     });
   
-    it("getUploadedFiles - failure", async () => {
+    it("test-id: 62,getUploadedFiles - failure", async () => {
       fetch.mockResolvedValueOnce({
         ok: false,
         json: async () => ({ error: "No files found" }),

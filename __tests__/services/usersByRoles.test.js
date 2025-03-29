@@ -8,7 +8,7 @@ beforeEach(() => {
 });
 
 describe("User Service", () => {
-  it("getUsersByRoleId - returns users for valid roleId", async () => {
+  it("test-id: 63,getUsersByRoleId - returns users for valid roleId", async () => {
     const mockUsers = [{ id: 1, name: "Alice" }, { id: 2, name: "Bob" }];
     fetch.mockResolvedValueOnce({
       ok: true,
@@ -24,7 +24,7 @@ describe("User Service", () => {
     await expect(getUsersByRoleId("invalid")).rejects.toThrow("roleId must be a number");
   });
 
-  it("getUsersByRoleId - handles fetch failure", async () => {
+  it("test-id: 64,getUsersByRoleId - handles fetch failure", async () => {
     fetch.mockResolvedValueOnce({
       ok: false,
       json: async () => ({ error: "Unauthorized access" }),
@@ -33,7 +33,7 @@ describe("User Service", () => {
     await expect(getUsersByRoleId(2)).rejects.toThrow("Unauthorized access");
   });
 
-  it("loadKeynoteSpeakers - logs speakers on success", async () => {
+  it("test-id: 65,loadKeynoteSpeakers - logs speakers on success", async () => {
     const mockSpeakers = [{ id: 101, name: "Dr. Keynote" }];
     fetch.mockResolvedValueOnce({
       ok: true,
@@ -46,7 +46,7 @@ describe("User Service", () => {
     consoleSpy.mockRestore();
   });
 
-  it("loadKeynoteSpeakers - handles errors and logs message", async () => {
+  it("test-id: 66,loadKeynoteSpeakers - handles errors and logs message", async () => {
     fetch.mockResolvedValueOnce({
       ok: false,
       json: async () => ({ error: "Failed to load speakers" }),

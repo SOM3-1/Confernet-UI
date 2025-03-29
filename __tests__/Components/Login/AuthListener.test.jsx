@@ -33,7 +33,7 @@ describe("AuthListener", () => {
     vi.clearAllMocks();
   });
 
-  it("renders loading spinner while auth is not checked", () => {
+  it("test-id: 6,renders loading spinner while auth is not checked", () => {
     firebaseAuth.onAuthStateChanged.mockImplementationOnce((_auth, callback) => {
       return () => {};
     });
@@ -51,7 +51,7 @@ describe("AuthListener", () => {
     expect(screen.getByRole("progressbar")).toBeInTheDocument();
   });
 
-  it("navigates to /home if authenticated and on public route", async () => {
+  it("test-id: 7,navigates to /home if authenticated and on public route", async () => {
     localStorage.setItem("signupInProgress", "false");
 
     const navigateMock = vi.fn();
@@ -76,7 +76,7 @@ describe("AuthListener", () => {
     });
   });
 
-  it("navigates to /login if unauthenticated and on protected route", async () => {
+  it("test-id: 8,navigates to /login if unauthenticated and on protected route", async () => {
     vi.mocked(firebaseAuth.onAuthStateChanged).mockImplementationOnce((_auth, callback) => {
       callback(null);
       return () => {};
@@ -98,7 +98,7 @@ describe("AuthListener", () => {
     });
   });
 
-  it("renders child route if authenticated and on protected route", async () => {
+  it("test-id: 9, renders child route if authenticated and on protected route", async () => {
     vi.mocked(firebaseAuth.onAuthStateChanged).mockImplementationOnce((_auth, callback) => {
       callback(mockUser);
       return () => {};

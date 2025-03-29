@@ -163,7 +163,7 @@ function People() {
                   onChange={(e) => handleChange(person.id, e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleSend(person.id)}
                 />
-                <IconButton color="primary" onClick={() => handleSend(person.id)} sx={{ ml: 1 }}>
+                <IconButton color="primary" onClick={() => handleSend(person.id)} sx={{ ml: 1 }} aria-label={`send message to ${person.name}`}>
                   <SendIcon />
                 </IconButton>
               </Box>

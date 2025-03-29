@@ -23,7 +23,7 @@ describe("Signup Component", () => {
     localStorage.clear();
   });
 
-  it("renders all form fields", () => {
+  it("test-id: 14, renders all form fields", () => {
     render(<Signup />, { wrapper: MemoryRouter });
 
     expect(screen.getByLabelText(/Full Name/i)).toBeInTheDocument();
@@ -34,7 +34,7 @@ describe("Signup Component", () => {
     expect(screen.getByRole("button", { name: /Signup/i })).toBeInTheDocument();
   });
 
-  it("shows success message and navigates after successful signup", async () => {
+  it("test-id: 15, shows success message and navigates after successful signup", async () => {
     createUserWithEmailAndPassword.mockResolvedValue({
       user: { uid: "test-uid" },
     });
@@ -58,7 +58,7 @@ describe("Signup Component", () => {
     expect(registerUser).toHaveBeenCalled();
   });
 
-  it("shows error message on failed signup", async () => {
+  it("test-id: 16, shows error message on failed signup", async () => {
     createUserWithEmailAndPassword.mockRejectedValue(new Error("Signup failed"));
   
     render(<Signup />, { wrapper: MemoryRouter });
@@ -76,7 +76,7 @@ describe("Signup Component", () => {
   });
   
 
-  it("displays loading spinner during signup", async () => {
+  it("test-id: 17, displays loading spinner during signup", async () => {
     let resolveSignup;
     createUserWithEmailAndPassword.mockImplementation(
       () =>

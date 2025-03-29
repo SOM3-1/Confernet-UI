@@ -13,7 +13,7 @@ import {
   });
   
   describe("Messaging API functions", () => {
-    it("sendMessage - success", async () => {
+    it("test-id: 49,sendMessage - success", async () => {
       fetch.mockResolvedValueOnce({
         ok: true,
         json: async () => ({ success: true, id: "msg123" }),
@@ -23,7 +23,7 @@ import {
       expect(data).toEqual({ success: true, id: "msg123" });
     });
   
-    it("sendMessage - failure", async () => {
+    it("test-id: 50,sendMessage - failure", async () => {
       fetch.mockResolvedValueOnce({
         ok: false,
         json: async () => ({ error: "User not found" }),
@@ -32,7 +32,7 @@ import {
       await expect(sendMessage("user1", "userX", "Hi")).rejects.toThrow("User not found");
     });
   
-    it("getConversations - success", async () => {
+    it("test-id: 51,getConversations - success", async () => {
       fetch.mockResolvedValueOnce({
         ok: true,
         json: async () => ({ conversations: ["conv1", "conv2"] }),
@@ -42,7 +42,7 @@ import {
       expect(data).toEqual({ conversations: ["conv1", "conv2"] });
     });
   
-    it("getConversations - failure", async () => {
+    it("test-id: 52,getConversations - failure", async () => {
       fetch.mockResolvedValueOnce({
         ok: false,
         json: async () => ({ error: "No conversations found" }),
@@ -51,7 +51,7 @@ import {
       await expect(getConversations("userX")).rejects.toThrow("No conversations found");
     });
   
-    it("getChatHistory - success", async () => {
+    it("test-id: 53,getChatHistory - success", async () => {
       fetch.mockResolvedValueOnce({
         ok: true,
         json: async () => ({ history: ["msg1", "msg2"] }),
@@ -61,7 +61,7 @@ import {
       expect(data).toEqual({ history: ["msg1", "msg2"] });
     });
   
-    it("getChatHistory - failure", async () => {
+    it("test-id: 54,getChatHistory - failure", async () => {
       fetch.mockResolvedValueOnce({
         ok: false,
         json: async () => ({ error: "Chat not found" }),

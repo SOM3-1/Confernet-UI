@@ -21,7 +21,7 @@ import {
   });
   
   describe("Event API functions", () => {
-    it("createEvent - success", async () => {
+    it("test-id: 37,createEvent - success", async () => {
       fetch.mockResolvedValueOnce({
         ok: true,
         json: async () => ({ id: "1", name: "Test Event" }),
@@ -31,7 +31,7 @@ import {
       expect(data).toEqual({ id: "1", name: "Test Event" });
     });
   
-    it("createEvent - failure", async () => {
+    it("test-id: 38,createEvent - failure", async () => {
       fetch.mockResolvedValueOnce({
         ok: false,
         json: async () => ({ error: "Invalid data" }),
@@ -40,7 +40,7 @@ import {
       await expect(createEvent({})).rejects.toThrow("Invalid data");
     });
   
-    it("getAllEvents - success", async () => {
+    it("test-id: 39,getAllEvents - success", async () => {
       fetch.mockResolvedValueOnce({
         ok: true,
         json: async () => ({ events: ["event1", "event2"] }),
@@ -50,7 +50,7 @@ import {
       expect(data).toEqual(["event1", "event2"]);
     });
   
-    it("getUpcomingEvents - success", async () => {
+    it("test-id: 40,getUpcomingEvents - success", async () => {
       fetch.mockResolvedValueOnce({
         ok: true,
         json: async () => ({ events: ["upcoming1"] }),
@@ -60,7 +60,7 @@ import {
       expect(data).toEqual(["upcoming1"]);
     });
   
-    it("getEventById - success", async () => {
+    it("test-id: 41,getEventById - success", async () => {
       fetch.mockResolvedValueOnce({
         ok: true,
         json: async () => ({ id: "123", name: "Event 123" }),
@@ -70,7 +70,7 @@ import {
       expect(data).toEqual({ id: "123", name: "Event 123" });
     });
   
-    it("updateEvent - success", async () => {
+    it("test-id: 42,updateEvent - success", async () => {
       fetch.mockResolvedValueOnce({
         ok: true,
         json: async () => ({ updated: true }),
@@ -80,7 +80,7 @@ import {
       expect(data).toEqual({ updated: true });
     });
   
-    it("deleteEvent - success", async () => {
+    it("test-id: 43,deleteEvent - success", async () => {
       fetch.mockResolvedValueOnce({
         ok: true,
         json: async () => ({ deleted: true }),
@@ -90,7 +90,7 @@ import {
       expect(data).toEqual({ deleted: true });
     });
   
-    it("getEventAttendees - success", async () => {
+    it("test-id: 44,getEventAttendees - success", async () => {
       fetch.mockResolvedValueOnce({
         ok: true,
         json: async () => ({ userIds: ["user1", "user2"] }),
@@ -100,7 +100,7 @@ import {
       expect(data).toEqual(["user1", "user2"]);
     });
   
-    it("postComment - success", async () => {
+    it("test-id: 45,postComment - success", async () => {
       fetch.mockResolvedValueOnce({
         ok: true,
         json: async () => ({ success: true }),
@@ -110,7 +110,7 @@ import {
       expect(data).toEqual({ success: true });
     });
   
-    it("getComments - success", async () => {
+    it("test-id: 46,getComments - success", async () => {
       fetch.mockResolvedValueOnce({
         ok: true,
         json: async () => ({ comments: ["Great!", "Loved it!"] }),
@@ -120,7 +120,7 @@ import {
       expect(data).toEqual(["Great!", "Loved it!"]);
     });
   
-    it("postRating - success", async () => {
+    it("test-id: 47,postRating - success", async () => {
       fetch.mockResolvedValueOnce({
         ok: true,
         json: async () => ({ message: "Rating submitted" }),
@@ -130,7 +130,7 @@ import {
       expect(data).toEqual({ message: "Rating submitted" });
     });
   
-    it("getRatingSummary - success", async () => {
+    it("test-id: 48,getRatingSummary - success", async () => {
       fetch.mockResolvedValueOnce({
         ok: true,
         json: async () => ({ avg: 4.5 }),
