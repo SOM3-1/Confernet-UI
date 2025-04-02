@@ -147,6 +147,5 @@ Generates a full test coverage report in the `coverage/` directory.
   - Lines
 ---
 
-> If you’d like to integrate this with CI/CD or Codecov/GitHub Actions, let me know and I’ll generate a config for that too!
 For any issues, please raise an issue on the GitHub repository.
 
