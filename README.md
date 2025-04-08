@@ -111,8 +111,26 @@ After signup or login, users are redirected to the **Home** screen where they se
 
 ---
 
-## Tests & Coverage
+## Automated Tests & Reports
+**Before running tests, ensure the dev server is active**
 
+## Run all tests:
+```bash
+npx playwright test
+```
+## Run a specific test file:
+```bash
+npx playwright test tests/people.spec.ts
+```
 
+## Generate HTML Report
+```bash
+npx playwright test --reporter=html
+```
+
+## View the report:
+```bash
+npx playwright show-report
+```
 
 For any issues, please raise an issue on the GitHub repository.
