@@ -20,14 +20,24 @@ npm install
 ```bash
 npm run dev
 ```
-Make sure the `homepage` field in `package.json` is set to your GitHub Pages URL:
-```json
-"homepage": "https://SOM3-1.github.io/Confernet-UI"
-```
+---
+
+## Login & Sign-Up Instructions
+
+### Logging In
+
+You can use the following test account to log in and explore the application:
+
+- **Email:** `dandelion@mail.com`  
+- **Password:** `123456`
+
+This user is registered as an **Organizer** and has access to all organizer-specific features like creating events and managing participants.
 
 ---
 
-## Roles & Access
+### Signing Up
+
+During sign-up, users must select a role. Each role grants access to different parts of the application:
 
 ### Organizer
 - Can create events and assign keynote speakers and moderators.
@@ -147,5 +157,62 @@ Generates a full test coverage report in the `coverage/` directory.
   - Lines
 ---
 
-For any issues, please raise an issue on the GitHub repository.
+## Automated End-to-End Testing with Playwright
 
+Before running any tests, make sure the development server is running:
+
+```bash
+npm run dev
+```
+
+### Installation (One-time setup)
+
+Install Playwright and its required browser binaries:
+
+```bash
+npx playwright install
+```
+
+### Available Test Commands
+
+#### Run all tests
+
+```bash
+npm run e2e
+```
+
+#### Run tests in headed mode (with browser UI)
+
+```bash
+npm run e2e:headed
+```
+
+#### Debug tests using Playwright Inspector
+
+```bash
+npm run e2e:debug
+```
+
+#### Run a specific test file
+
+```bash
+npm run e2e:file
+```
+
+> Update the path in `e2e:file` script if you want to point to a different test file.
+
+#### Generate HTML Report
+
+```bash
+npm run e2e:report
+```
+
+#### View the last generated HTML report
+
+```bash
+npm run e2e:show-report
+```
+
+### Help
+
+If you encounter any issues, please raise an issue on the GitHub repository.

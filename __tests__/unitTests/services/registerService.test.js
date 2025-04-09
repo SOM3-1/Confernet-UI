@@ -1,4 +1,4 @@
-import { registerUser } from "../../src/services/registerService";
+import { registerUser } from "../../../src/services/registerService";
 import { vi, describe, it, expect, beforeEach } from "vitest";
 
 global.fetch = vi.fn();

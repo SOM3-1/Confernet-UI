@@ -1,9 +1,9 @@
 import { describe, it, vi, beforeEach, expect } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import ChatPopup from "../../../src/Components/Messages/MessageModal";
-import { getChatHistory, sendMessage } from "../../../src/services/messageService";
+import ChatPopup from "../../../../src/Components/Messages/MessageModal";
+import { getChatHistory, sendMessage } from "@/services/messageService";
 
-vi.mock("../../../src/services/messageService", () => ({
+vi.mock("@/services/messageService", () => ({
   getChatHistory: vi.fn(),
   sendMessage: vi.fn(),
 }));

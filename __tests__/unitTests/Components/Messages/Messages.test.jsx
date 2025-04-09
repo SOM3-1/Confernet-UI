@@ -1,17 +1,17 @@
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
-import Message from "../../../src/Components/Messages/Message";
+import Message from "../../../../src/Components/Messages/Message";
 import { vi, describe, it, beforeEach } from "vitest";
 import { MemoryRouter } from "react-router-dom";
 
-vi.mock("../../../src/services/userService", () => ({
+vi.mock("@/services/userService", () => ({
   getAllUsers: vi.fn(),
 }));
 
-vi.mock("../../../src/services/messageService", () => ({
+vi.mock("@/services/messageService", () => ({
   getConversations: vi.fn(),
 }));
 
-vi.mock("../../../src/Components/Message/MessageModal", () => ({
+vi.mock("../../../../src/Components/Message/MessageModal", () => ({
   default: ({ open, onClose, senderId, receiverId, receiverName }) => (
     open ? <div data-testid="chat-popup">Chat with {receiverName}</div> : null
   ),
@@ -31,8 +31,8 @@ const mockConversations = [
   },
 ];
 
-import { getAllUsers } from "../../../src/services/userService";
-import { getConversations } from "../../../src/services/messageService";
+import { getAllUsers } from "@/services//userService";
+import { getConversations } from "@/services//messageService";
 
 beforeEach(() => {
   vi.clearAllMocks();

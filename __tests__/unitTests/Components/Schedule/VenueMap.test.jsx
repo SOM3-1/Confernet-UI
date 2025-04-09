@@ -1,7 +1,7 @@
 // __tests__/Components/Schedule/VenueMap.test.js
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { VenueMap } from '../../../src/Components/Schedule/VenueMap';
+import { VenueMap } from '../../../../src/Components/Schedule/VenueMap';
 
 
 describe('VenueMap Component', () => {

@@ -1,7 +1,7 @@
 import { describe, it, vi, beforeEach, afterEach, expect } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
-import { AuthListener } from "../../../src/Components/Login/AuthListener";
+import { AuthListener } from "../../../../src/Components/Login/AuthListener";
 import * as firebaseAuth from "firebase/auth";
 import { act } from "react-dom/test-utils";
 
@@ -20,7 +20,7 @@ vi.mock("firebase/auth", () => {
   };
 });
 
-vi.mock("../../../src/firebase/firebaseConfig", () => ({
+vi.mock("../../../../src/firebase/firebaseConfig", () => ({
   auth: {}, 
 }));
 

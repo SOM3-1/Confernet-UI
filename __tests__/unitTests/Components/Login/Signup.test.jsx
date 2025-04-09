@@ -1,19 +1,19 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import Signup from "../../../src/Components/Login/Signup";
+import Signup from "../../../../src/Components/Login/Signup";
 import { MemoryRouter } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { registerUser } from "../../../src/services/registerService";
+import { registerUser } from "../../../../src/services/registerService";
 
 vi.mock("firebase/auth", () => ({
   createUserWithEmailAndPassword: vi.fn(),
 }));
 
-vi.mock("../../../src/firebase/firebaseConfig", () => ({
+vi.mock("../../../../src/firebase/firebaseConfig", () => ({
   auth: {},
 }));
 
-vi.mock("../../../src/services/registerService", () => ({
+vi.mock("../../../../src/services/registerService", () => ({
   registerUser: vi.fn(),
 }));
 
