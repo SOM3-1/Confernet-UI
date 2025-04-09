@@ -1,5 +1,4 @@
 # Confernet_UI
-# ConferNet UI
 
 This is the frontend for the ConferNet web application, built with React, Firebase, and Material UI. The app supports three roles: **Organizer**, **Speaker**, and **Attendee**, each with their own set of permissions and screens.
 
