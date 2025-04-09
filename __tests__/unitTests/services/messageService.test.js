@@ -2,7 +2,7 @@ import {
     sendMessage,
     getConversations,
     getChatHistory,
-  } from "../../src/services/messageService";
+  } from "./../../../src/services/messageService";
   
   import { vi, describe, it, expect, beforeEach } from "vitest";
   

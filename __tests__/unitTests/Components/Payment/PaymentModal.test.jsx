@@ -1,6 +1,6 @@
 import { describe, it, vi, beforeEach, expect } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import PaymentModal from "./../../../src/Components/Payment/PaymentModal";
+import PaymentModal from "../../../../src/Components/Payment/PaymentModal";
 
 const mockEvent = {
   registrationFee: "25",

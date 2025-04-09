@@ -2,7 +2,7 @@ import {
     uploadSpeakerFile,
     deleteSpeakerFile,
     getUploadedFiles,
-  } from "../../src/services/uploadsService"
+  } from "../../../src/services/uploadsService"
   
   import { vi, describe, it, expect, beforeEach } from "vitest";
   

@@ -1,6 +1,6 @@
 import { describe, it, vi, beforeEach, expect } from 'vitest';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
-import { CreateEventButton } from '../../../src/Components/Event/CreateEventButton';
+import { CreateEventButton } from '../../../../src/Components/Event/CreateEventButton';
 import * as userService from '@/services/userService';
 import { onAuthStateChanged } from 'firebase/auth';
 

@@ -13,9 +13,9 @@ import {
     joinEvent,
     leaveEvent,
     getRegisteredEvents,
-  } from "./../../src/services/userService";
+  } from "./../../../src/services/userService";
   
-  vi.mock("../../../src/firebase/firebaseConfig", () => ({
+  vi.mock("../../../../src/firebase/firebaseConfig", () => ({
     auth: {
       currentUser: { uid: "mock-user-id" },
     },
@@ -39,7 +39,7 @@ import {
   
     it("test-id: 68, getUserById - success", async () => {
         const mockUser = { uid: "abc123" };
-        const { auth } = await import("./../../src/firebase/firebaseConfig");
+        const { auth } = await import("./../../../src/firebase/firebaseConfig");
         auth.currentUser = mockUser;
       
         fetch.mockResolvedValueOnce({

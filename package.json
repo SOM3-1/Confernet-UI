@@ -13,7 +13,13 @@
     "deploy": "gh-pages -d dist",
     "test": "vitest",
     "test:watch": "vitest --watch",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "e2e": "playwright test",
+    "e2e:headed": "playwright test --headed --workers=1",
+    "e2e:debug": "playwright test --debug",
+    "e2e:file": "playwright test __tests__/automation/people.spec.ts --headed",
+    "e2e:report": "playwright test --reporter=html",
+    "e2e:show-report": "playwright show-report"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -25,6 +31,7 @@
     "axios": "^1.8.4",
     "date-fns": "^2.30.0",
     "firebase": "^11.4.0",
+    "playwright": "^1.51.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-firebase-hooks": "^5.1.1",
@@ -33,6 +40,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
+    "@playwright/test": "^1.51.1",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.2.0",
     "@testing-library/user-event": "^14.6.1",

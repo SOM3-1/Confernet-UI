@@ -10,7 +10,7 @@ import {
     getComments,
     postRating,
     getRatingSummary,
-  } from "../../src/services/eventService";
+  } from "../../../src/services/eventService";
   
   import { vi, describe, it, expect, beforeEach } from "vitest";
   

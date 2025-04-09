@@ -1,14 +1,14 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
-import Login from "../../../src/Components/Login/Login";
+import Login from "../../../../src/Components/Login/Login";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
 vi.mock("firebase/auth", () => ({
   signInWithEmailAndPassword: vi.fn(),
 }));
 
-vi.mock("../../../src/firebase/firebaseConfig", () => ({
+vi.mock("../../../../src/firebase/firebaseConfig", () => ({
   auth: {},
 }));
 

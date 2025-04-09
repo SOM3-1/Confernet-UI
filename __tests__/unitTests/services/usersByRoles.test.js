@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { getUsersByRoleId, loadKeynoteSpeakers } from "../../src/services/usersByRoles"
+import { getUsersByRoleId, loadKeynoteSpeakers } from "../../../src/services/usersByRoles"
 
 global.fetch = vi.fn();
 
