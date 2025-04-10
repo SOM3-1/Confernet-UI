@@ -25,3 +25,5 @@ dist-ssr
 /coverage
 
 .last-run.json
+screenshots
+playwright-report

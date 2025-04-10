@@ -204,13 +204,7 @@ npm run e2e:file
 #### Generate HTML Report
 
 ```bash
-npm run e2e:report
-```
-
-#### View the last generated HTML report
-
-```bash
-npm run e2e:show-report
+npm run e2e:run-report
 ```
 
 ### Help
