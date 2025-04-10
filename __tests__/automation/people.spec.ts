@@ -1,32 +1,43 @@
+// tests/automation/people.spec.ts
 import { test, expect } from '@playwright/test';
 
-test.describe('People Page', () => {
+const BASE_URL = 'http://localhost:5173';
+const EMAIL = 'john@mail.com';
+const PASSWORD = '123456';
+
+async function login(page) {
+  await page.goto(`${BASE_URL}/login`);
+  await page.getByLabel('Email').fill(EMAIL);
+  await page.getByLabel('Password').fill(PASSWORD);
+  await page.getByRole('button', { name: /login/i }).click();
+  await page.waitForURL('**/home');
+}
+
+test.describe(' People Page', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:5173/home/people');
+    await login(page);
+    await page.goto(`${BASE_URL}/home/people`);
   });
 
-  test(' Page loads with heading or search input', async ({ page }) => {
-    const heading = page.getByText(/Networking/i);
-    const searchBox = page.getByPlaceholder(/Search people by/i);
+  test(' Sees "Alice Johnson" and filters her out by typing another name', async ({ page }) => {
+    const alice = page.getByText('Alice Johnson', { exact: false });
+    await expect(alice).toBeVisible();
 
-    if (await heading.count()) {
-      await expect(heading).toBeVisible({ timeout: 5000 });
-    } else {
-      console.warn('⚠️ "Networking" heading not found — skipping check');
-    }
+    const search = page.locator('input[placeholder*="search" i]');
+    await search.fill('bob');
+    await page.waitForTimeout(500);
 
-    // await expect(searchBox).toBeVisible({ timeout: 5000 });
+    await expect(alice).toHaveCount(0);
   });
 
-  test(' Renders at least one person (if any)', async ({ page }) => {
-    const peopleList = page.locator('.MuiListItem-root');
-    expect(await peopleList.count()).toBeGreaterThanOrEqual(0); // 0 is valid if no users
-  });
+  test(' Sends a message to Alice Johnson and shows success snackbar', async ({ page }) => {
+    const messageInput = page.locator('textarea[placeholder*="message Alice Johnson" i]');
+    await expect(messageInput).toBeVisible();
 
-  test(' Message input and send button appear for a person (if users exist)', async ({ page }) => {
-    const messageInput = page.locator('input[placeholder*="Message"]');
-    if (await messageInput.count()) {
-      await expect(messageInput.first()).toBeVisible({ timeout: 5000 });
-    }
+    await messageInput.fill('Hello!');
+    await page.getByRole('button', { name: /send/i }).click();
+
+    const snackbar = page.locator('.MuiSnackbar-root');
+    await expect(snackbar).toContainText('Message sent successfully');
   });
 });

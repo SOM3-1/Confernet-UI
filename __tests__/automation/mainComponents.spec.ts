@@ -26,7 +26,7 @@ test.describe(' UI Component Integration Tests', () => {
       const tabCount = await tabs.count();
       expect(tabCount).toBeGreaterThan(0);
     } else {
-      console.warn('⚠️ Sidebar toggle button not found');
+      console.warn(' Sidebar toggle button not found');
     }
   });
 
@@ -44,7 +44,7 @@ test.describe(' UI Component Integration Tests', () => {
     if (await heading.count()) {
       await expect(heading.first()).toBeVisible();
     } else {
-      console.warn('⚠️ No heading found on /home/account');
+      console.warn(' No heading found on /home/account');
     }
   });
 });

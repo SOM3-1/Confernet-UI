@@ -6,12 +6,12 @@ test.describe(" Schedule Page", () => {
     await page.goto("http://localhost:5173/home/schedule"); 
   });
 
-  test(" Renders schedule page with search bar and list or fallback", async ({ page }) => {
+  test(" Renders schedule page with search bar and list", async ({ page }) => {
     try {
       const searchInput = page.getByPlaceholder(/Search events/i);
       await expect(searchInput).toBeVisible({ timeout: 7000 }); 
     } catch {
-      console.warn(" Search bar not visible — possibly delayed or failed to load.");
+      console.warn(" Search bar not visible");
     }
 
     const cards = page.locator(".MuiCard-root");
