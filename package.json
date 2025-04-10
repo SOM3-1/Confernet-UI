@@ -19,7 +19,8 @@
     "e2e:debug": "playwright test --debug",
     "e2e:file": "playwright test __tests__/automation/allWorkflow.spec.js --headed",
     "e2e:report": "playwright test --reporter=html",
-    "e2e:show-report": "playwright show-report"
+    "e2e:show-report": "playwright show-report",
+    "e2e:run-report": "npm run e2e:report && npm run e2e:show-report"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
