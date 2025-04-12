@@ -49,6 +49,7 @@ function Schedule({ onSelectEvent }) {
   const [paymentEvent, setPaymentEvent] = useState(null);
   const [paymentOpen, setPaymentOpen] = useState(false);
   const navigate = useNavigate();
+  const [speakerEvents, setSpeakerEvents] = useState([]);
 
   const fetchEvents = async () => {
     setLoading(true);
@@ -60,6 +61,10 @@ function Schedule({ onSelectEvent }) {
         .map(e => e.eventId);
       setOwnedEvents(owned);
       setEvents(upcoming);
+      const speakerFor = upcoming
+      .filter(e => Array.isArray(e.keynoteSpeakers) && e.keynoteSpeakers.includes(userId))
+      .map(e => e.eventId);
+    setSpeakerEvents(speakerFor);
       await fetchUserPreferences();
     } catch (err) {
       console.error(err);
@@ -220,6 +225,7 @@ function Schedule({ onSelectEvent }) {
                             size="small"
                             color={joined.includes(event.eventId) ? "error" : "primary"}
                             onClick={() => handleJoinToggle(event)}
+                            disabled={speakerEvents.includes(event.eventId)}
                           >
                             {joined.includes(event.eventId) ? "Leave Event" : "Join"}
                           </Button>
