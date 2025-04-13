@@ -77,23 +77,21 @@ describe("Message Component", () => {
     });
   });
 
-  it("test-id: 24, opens new message popup", async () => {
+  it("test-id: 24, renders disabled New Message button only", async () => {
     getAllUsers.mockResolvedValue(mockUsers);
     getConversations.mockResolvedValue([]);
-
+  
     render(
       <MemoryRouter>
         <Message />
       </MemoryRouter>
     );
-
-    fireEvent.click(screen.getByRole("button", { name: /New Message/i }));
-
-    await waitFor(() => {
-      expect(screen.getByTestId("chat-popup")).toBeInTheDocument();
-      expect(screen.getByText(/Chat with Select a user/i)).toBeInTheDocument();
-    });
+  
+    const newMsgButton = screen.getByRole("button", { name: /New Message/i });
+    expect(newMsgButton).toBeInTheDocument();
+    expect(newMsgButton).toBeDisabled();
   });
+  
 
   it("test-id: 25, opens existing chat popup from conversation list", async () => {
     getAllUsers.mockResolvedValue(mockUsers);

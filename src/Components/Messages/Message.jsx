@@ -105,7 +105,7 @@ function Message() {
       <CardContent>
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
           <Typography variant="h6">Inbox</Typography>
-          <Button variant="contained" size="small" onClick={() => handleOpenPopup(null)}>
+          <Button variant="contained" size="small" onClick={() => handleOpenPopup(null)} disabled={true}>
             New Message
           </Button>
         </Box>
