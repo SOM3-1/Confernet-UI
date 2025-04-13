@@ -10,6 +10,17 @@ Hosted at: [https://SOM3-1.github.io/Confernet-UI](https://SOM3-1.github.io/Conf
 ## Getting Started
 
 ### Installation
+
+If the project is already downloaded locally:
+
+- Open a terminal inside the `Confernet-UI` folder.
+- Run the following commands:
+
+```bash
+npm install
+```
+
+If you don't have the project locally: 
 ```bash
 git clone https://github.com/SOM3-1/Confernet-UI.git
 cd Confernet-UI
@@ -26,13 +37,23 @@ npm run dev
 
 ### Logging In
 
-You can use the following test account to log in and explore the application:
-
+### Organizer  
 - **Email:** `dandelion@mail.com`  
 - **Password:** `123456`
 
-This user is registered as an **Organizer** and has access to all organizer-specific features like creating events and managing participants.
+### Keynote Speaker  
+- **Email:** `mj@mail.com`  
+- **Password:** `123456`
 
+### Attendee  
+- **Email:** `ciri@mail.com`  
+- **Password:** `123456`
+
+After logging in, you'll be taken to the **Home** screen showing upcoming events.
+
+- **Organizers** can create and manage events.
+- **Speakers** can upload files for events they're assigned to.
+- **Attendees** can join/bookmark events, comment, and rate.
 ---
 
 ### Signing Up
@@ -175,7 +196,13 @@ npx playwright install
 
 ### Available Test Commands
 
-#### Run all tests
+#### Run all tests in headed mode (with browser UI)
+
+```bash
+npm run e2e:file
+```
+
+#### Run all tests in headless mode (without browser UI)
 
 ```bash
 npm run e2e
