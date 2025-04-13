@@ -27,3 +27,5 @@ dist-ssr
 .last-run.json
 screenshots
 playwright-report
+.env
+.env.production

@@ -11,7 +11,8 @@ import {
 
   const generateEmbedLink = (query) => {
     const encoded = encodeURIComponent(query);
-    return `https://www.google.com/maps/embed/v1/place?key=AIzaSyBWGLJmIY4lMUmtnF0E9Kjcq-UOi-Owbco
+    const configKey = import.meta.env.VITE_GOOGLE_MAPS_EMBED_API_KEY;
+    return `https://www.google.com/maps/embed/v1/place?key=${configKey}
 &q=${encoded}`;
   };
   
