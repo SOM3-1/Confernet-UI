@@ -14,13 +14,15 @@ describe('VenueMap Component', () => {
 
   it('test-id: 35,renders the iframe with the correct src', () => {
     render(<VenueMap link={testMapLink} />);
-    const iframe = screen.getByTitle(/conference venue map/i);
+    const iframe = screen.getByTitle(/venue map/i);
+
     expect(iframe).toBeInTheDocument();
   });
 
   it('test-id: 36,applies correct iframe styles and attributes', () => {
     render(<VenueMap link={testMapLink} />);
-    const iframe = screen.getByTitle(/conference venue map/i);
+    const iframe = screen.getByTitle(/venue map/i);
+
 
     expect(iframe).toHaveAttribute('width', '100%');
     expect(iframe).toHaveAttribute('height', '800');
